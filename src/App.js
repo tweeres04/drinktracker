@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import differenceInMinutes from 'date-fns/difference_in_minutes';
 import dateFormat from 'date-fns/format';
 
-import './App.css';
+import Drinks from './components/Drinks';
+import NewDrink from './components/NewDrink';
+
+import 'bulma/css/bulma.css';
+import 'react-datetime/css/react-datetime.css';
 
 export function drinkFactory({ time, value }) {
 	return {
@@ -30,65 +34,27 @@ export function currentDrinks(drinks) {
 	}, 0);
 }
 
-class NewDrink extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			time: dateFormat(new Date(), 'HH:mm'),
-			value: 1
-		};
-
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
-	render() {
-		const { time, value } = this.state;
-		return (
-			<div className="new-drink">
-				<div className="time">
-					<input
-						name="time"
-						type="text"
-						value={time}
-						onChange={this.handleChange}
-					/>
-				</div>
-				<div className="value">
-					<input
-						name="value"
-						type="number"
-						value={value}
-						onChange={this.handleChange}
-					/>
-				</div>
-				<button onClick={this.handleSubmit}>Drink!</button>
-			</div>
-		);
-	}
-	handleChange({ target: { value, name } }) {
-		this.setState({ [name]: value });
-	}
-	handleSubmit() {
-		const { addDrink } = this.props;
-		const { time, value } = this.state;
-		addDrink(
-			drinkFactory({
-				time,
-				value
-			})
-		);
-	}
+export function Section({ children, className }) {
+	return (
+		<div className={`columns${className ? ` ${className}` : ''}`}>
+			<div className="column">{children}</div>
+		</div>
+	);
 }
 
-function Drinks({ drinks }) {
-	const drinkListItems = drinks.map((drink, i) => (
-		<li key={i}>
-			<div className="label">Drink at</div>
-			<div className="value">{drink.time}</div>
-		</li>
-	));
-	return <ul className="drink-list">{drinkListItems}</ul>;
+function CurrentDrinks({ drinks }) {
+	return (
+		<section className="hero is-primary">
+			<div className="hero-body">
+				<div className="container has-text-centered">
+					<h1 className="title">
+						{currentDrinks(drinks).toFixed(2)}
+					</h1>
+					<h2 className="subtitle">drinks in your system</h2>
+				</div>
+			</div>
+		</section>
+	);
 }
 
 export default class App extends Component {
@@ -105,14 +71,13 @@ export default class App extends Component {
 		const { drinks } = this.state;
 		return (
 			<div className="App">
-				<div className="current-drinks">
-					<div className="value">
-						{currentDrinks(drinks).toFixed(2)}
+				<CurrentDrinks drinks={drinks} />
+				<section className="section">
+					<div className="container">
+						<NewDrink addDrink={this.addDrink} />
+						<Drinks drinks={drinks} />
 					</div>
-					<div className="label">drinks in your system</div>
-				</div>
-				<NewDrink addDrink={this.addDrink} />
-				<Drinks drinks={drinks} />
+				</section>
 			</div>
 		);
 	}

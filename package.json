@@ -3,10 +3,11 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"bulma": "^0.6.1",
 		"date-fns": "^1.29.0",
 		"lodash": "^4.17.4",
-		"rc-time-picker": "^2.4.1",
 		"react": "^16.0.0",
+		"react-datetime": "^2.11.1",
 		"react-dom": "^16.0.0",
 		"react-scripts": "^1.0.17"
 	},
@@ -16,7 +17,8 @@
 		"test": "react-scripts test --env=jsdom",
 		"debug-test":
 			"node --inspect-brk ./node_modules/react-scripts test --env=jsdom",
-		"eject": "react-scripts eject"
+		"eject": "react-scripts eject",
+		"deploy": "yarn build && surge ./build drinktracker.surge.sh"
 	},
 	"devDependencies": {
 		"prettier-eslint": "^8.6.2"
