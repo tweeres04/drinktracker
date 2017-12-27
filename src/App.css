@@ -1,9 +1,14 @@
 .App {
 	text-align: center;
-	font-size: 2em;
+	font-size: 2rem;
 }
 
 ul {
 	list-style-type: none;
 	padding-left: 0;
+}
+
+.current-drinks .label,
+.drink-list .label {
+	font-size: 1rem;
 }

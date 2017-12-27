@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
-import TimePicker from 'rc-time-picker';
-
-import setHours from 'date-fns/set_hours';
-import setMinutes from 'date-fns/set_minutes';
-import dateParse from 'date-fns/parse';
 import differenceInMinutes from 'date-fns/difference_in_minutes';
 import dateFormat from 'date-fns/format';
-
-import flow from 'lodash/fp/flow';
 
 import './App.css';
 
@@ -90,9 +83,12 @@ class NewDrink extends Component {
 
 function Drinks({ drinks }) {
 	const drinkListItems = drinks.map((drink, i) => (
-		<li key={i}>{drink.time}</li>
+		<li key={i}>
+			<div className="label">Drink at</div>
+			<div className="value">{drink.time}</div>
+		</li>
 	));
-	return <ul>{drinkListItems}</ul>;
+	return <ul className="drink-list">{drinkListItems}</ul>;
 }
 
 export default class App extends Component {

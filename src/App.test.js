@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import subMinutes from 'date-fns/sub_minutes';
 import dateFormat from 'date-fns/format';
 
-import App, { drinkFactory, currentDrinks, setTime } from './App';
+import App, { drinkFactory, currentDrinks } from './App';
 
 it('renders without crashing', () => {
 	const div = document.createElement('div');
