@@ -3,9 +3,8 @@
 	"name": "Drinktracker",
 	"icons": [
 		{
-			"src": "glass.svg",
-			"sizes": "512x512",
-			"type": "image/png"
+			"src": "glass.png",
+			"sizes": "72x72 96x96 128x128 256x256 512x512"
 		}
 	],
 	"start_url": "./index.html",
