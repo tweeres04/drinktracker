@@ -15,8 +15,7 @@ export function drinkFactory({ time, value }) {
 	};
 }
 
-export function currentDrinks(drinks) {
-	const now = new Date();
+export function currentDrinks({ drinks, now = new Date() }) {
 	const today = dateFormat(now, 'YYYY-MM-DD');
 	return drinks.reduce((drinks, drink) => {
 		const minsSinceDrink = differenceInMinutes(
@@ -42,13 +41,13 @@ export function Section({ children, className }) {
 	);
 }
 
-function CurrentDrinks({ drinks }) {
+function CurrentDrinks({ drinks, now }) {
 	return (
 		<section className="hero is-primary">
 			<div className="hero-body">
 				<div className="container has-text-centered">
 					<h1 className="title">
-						{currentDrinks(drinks).toFixed(2)}
+						{currentDrinks({ drinks, now }).toFixed(2)}
 					</h1>
 					<h2 className="subtitle">drinks in your system</h2>
 				</div>
@@ -62,16 +61,25 @@ export default class App extends Component {
 		super(props);
 
 		this.state = {
-			drinks: []
+			drinks: [],
+			now: new Date()
 		};
 
 		this.addDrink = this.addDrink.bind(this);
 	}
+	componentDidMount() {
+		this.timeHandle = setInterval(() => {
+			this.setState({ now: new Date() });
+		}, 30000);
+	}
+	componentWillUnmount() {
+		clearInterval(this.timeHandle);
+	}
 	render() {
-		const { drinks } = this.state;
+		const { drinks, now } = this.state;
 		return (
 			<div className="App">
-				<CurrentDrinks drinks={drinks} />
+				<CurrentDrinks drinks={drinks} now={now} />
 				<section className="section">
 					<div className="container">
 						<NewDrink addDrink={this.addDrink} />
