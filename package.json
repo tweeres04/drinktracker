@@ -18,7 +18,7 @@
 		"debug-test":
 			"node --inspect-brk ./node_modules/react-scripts test --env=jsdom",
 		"eject": "react-scripts eject",
-		"deploy": "yarn build && surge ./build drinktracker.surge.sh"
+		"deploy": "yarn build && surge ./build https://drinktracker.surge.sh"
 	},
 	"devDependencies": {
 		"prettier-eslint": "^8.6.2"
