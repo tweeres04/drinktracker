@@ -17,7 +17,7 @@ export default function Drinks({ drinks }) {
 			</Section>
 		);
 	});
-	const drinkCount = drinks.length;
+	const drinkCount = drinks.reduce((total, { value }) => (total += value), 0);
 	return (
 		<div className="drink-list has-text-centered">
 			<h3 className="title">

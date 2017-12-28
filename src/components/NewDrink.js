@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import dateFormat from 'date-fns/format';
 import TimePicker from 'react-datetime';
+import _toNumber from 'lodash/fp/toNumber';
 
 import { drinkFactory, Section } from '../App';
 
@@ -62,7 +63,7 @@ export default class NewDrink extends Component {
 		this.setState({ time });
 	}
 	handleChange({ target: { value, name } }) {
-		this.setState({ [name]: value });
+		this.setState({ [name]: _toNumber(value) });
 	}
 	handleSubmit() {
 		const { addDrink } = this.props;

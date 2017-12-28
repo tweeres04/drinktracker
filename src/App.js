@@ -17,17 +17,12 @@ export function drinkFactory({ time, value }) {
 
 export function currentDrinks({ drinks, now = new Date() }) {
 	const today = dateFormat(now, 'YYYY-MM-DD');
-	return drinks.reduce((drinks, drink) => {
-		const minsSinceDrink = differenceInMinutes(
-			now,
-			`${today}:${drink.time}`
-		);
+	return drinks.reduce((drinks, { time, value }) => {
+		const minsSinceDrink = differenceInMinutes(now, `${today}:${time}`);
 		const effectiveDrinks =
 			minsSinceDrink == 0
-				? 1
-				: minsSinceDrink > 59
-					? 0
-					: (1 - minsSinceDrink / 60) * drink.value;
+				? 1 * value
+				: minsSinceDrink > 59 ? 0 : (1 - minsSinceDrink / 60) * value;
 		drinks += effectiveDrinks;
 		return drinks;
 	}, 0);
