@@ -23,9 +23,9 @@ export default class NewDrink extends Component {
 
 		return (
 			<Section>
-				<div className="field">
-					<label className="label">Time</label>
-					<div className="control">
+				<label className="label">Time</label>
+				<div className="field has-addons">
+					<div className="control is-expanded">
 						<TimePicker
 							inputProps={{
 								className: 'input'
@@ -35,6 +35,11 @@ export default class NewDrink extends Component {
 							value={time}
 							onChange={this.handleTimeChange}
 						/>
+					</div>
+					<div className="control">
+						<button className="button" onClick={this.now}>
+							Now
+						</button>
 					</div>
 				</div>
 				<div className="field">
@@ -75,4 +80,7 @@ export default class NewDrink extends Component {
 			})
 		);
 	}
+	now = () => {
+		this.setState({ time: dateFormat(new Date(), 'HH:mm') });
+	};
 }
