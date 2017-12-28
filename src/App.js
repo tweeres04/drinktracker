@@ -81,6 +81,13 @@ export default class App extends Component {
 						<Drinks drinks={drinks} />
 					</div>
 				</section>
+				<footer className="footer">
+					<div className="container">
+						<div className="content has-text-centered">
+							<p>&copy; 2017 Tweeres Software</p>
+						</div>
+					</div>
+				</footer>
 			</div>
 		);
 	}
