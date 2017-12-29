@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import differenceInMinutes from 'date-fns/difference_in_minutes';
 import dateFormat from 'date-fns/format';
+import parseDate from 'date-fns/parse';
 import idbKeyval from 'idb-keyval';
 
 import Drinks from './components/Drinks';
@@ -19,7 +20,8 @@ export function drinkFactory({ time, value }) {
 export function currentDrinks({ drinks, now = new Date() }) {
 	const today = dateFormat(now, 'YYYY-MM-DD');
 	return drinks.reduce((drinks, { time, value }) => {
-		const minsSinceDrink = differenceInMinutes(now, `${today}:${time}`);
+		const dateTime = parseDate(`${today}T${time}`);
+		const minsSinceDrink = differenceInMinutes(now, dateTime);
 		const effectiveDrinks =
 			minsSinceDrink == 0
 				? 1 * value
