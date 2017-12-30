@@ -63,7 +63,11 @@ export function Section({ children, className }) {
 function CurrentDrinks({ drinks, now }) {
 	const currentDrinksValue = currentDrinks({ drinks, now });
 	return (
-		<section className="hero is-primary">
+		<section
+			className={`hero${
+				currentDrinksValue >= 10 ? ' is-danger' : ' is-primary'
+			}`}
+		>
 			<div className="hero-body">
 				<div className="container has-text-centered">
 					<h1 className="title">{currentDrinksValue.toFixed(2)}</h1>
