@@ -5,25 +5,29 @@ import dateFormat from 'date-fns/format';
 
 import App, { drinkFactory, currentDrinks } from './App';
 
-it('renders without crashing', () => {
+test('renders without crashing', () => {
 	const div = document.createElement('div');
 	ReactDOM.render(<App />, div);
 });
 
-it('creates a proper drinkFactory', () => {});
+test('creates a proper drinkFactory', () => {});
 
-it('gives the right number of current drinks', () => {
+test.only('gives the right number of current drinks', () => {
 	const format = 'HH:mm';
 	const nowDate = new Date();
 
+	const threeHoursAgo = dateFormat(subMinutes(nowDate, 240), format);
 	const twoHoursAgo = dateFormat(subMinutes(nowDate, 120), format);
 	const fiftyFiveMinutesAgo = dateFormat(subMinutes(nowDate, 55), format);
 	const fortyFiveMinutesAgo = dateFormat(subMinutes(nowDate, 45), format);
 	const thirtyMinutesAgo = dateFormat(subMinutes(nowDate, 30), format);
 	const now = dateFormat(nowDate, format);
 
-	// console.log(now, thirtyMinutesAgo, fortyFiveMinutesAgo, twoHoursAgo);
 	const drinks = [
+		drinkFactory({
+			time: threeHoursAgo,
+			value: 1
+		}),
 		drinkFactory({
 			time: twoHoursAgo,
 			value: 1
@@ -38,7 +42,7 @@ it('gives the right number of current drinks', () => {
 		}),
 		drinkFactory({
 			time: thirtyMinutesAgo,
-			value: 1
+			value: 2
 		}),
 		drinkFactory({
 			time: now,
@@ -46,5 +50,8 @@ it('gives the right number of current drinks', () => {
 		})
 	];
 
-	expect(currentDrinks(drinks)).toBeCloseTo(1.83);
+	const actual = currentDrinks({ drinks });
+	const expected = 4.066;
+
+	expect(actual).toBeCloseTo(expected);
 });

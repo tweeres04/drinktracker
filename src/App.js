@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import differenceInMinutes from 'date-fns/difference_in_minutes';
 import dateFormat from 'date-fns/format';
 import parseDate from 'date-fns/parse';
+import addMinutes from 'date-fns/add_minutes';
+import dateIsAfter from 'date-fns/is_after';
 import idbKeyval from 'idb-keyval';
+import _orderBy from 'lodash/fp/orderBy';
+import _cloneDeep from 'lodash/fp/cloneDeep';
 
 import Drinks from './components/Drinks';
 import NewDrink from './components/NewDrink';
@@ -19,16 +23,37 @@ export function drinkFactory({ time, value }) {
 
 export function currentDrinks({ drinks, now = new Date() }) {
 	const today = dateFormat(now, 'YYYY-MM-DD');
-	return drinks.reduce((drinks, { time, value }) => {
-		const dateTime = parseDate(`${today}T${time}`);
-		const minsSinceDrink = differenceInMinutes(now, dateTime);
-		const effectiveDrinks =
-			minsSinceDrink == 0
-				? 1 * value
-				: minsSinceDrink > 59 ? 0 : (1 - minsSinceDrink / 60) * value;
-		drinks += effectiveDrinks;
-		return drinks;
+
+	drinks = _cloneDeep(drinks);
+	drinks = _orderBy('time')('asc')(drinks);
+
+	drinks = drinks.map((drink, i) => {
+		const { time, value } = drink;
+		const nextDrink = drinks[i + 1] || {};
+
+		const requiredMins = value * 60;
+		const startTime = parseDate(`${today}T${drink.startTime || time}`);
+		const finishTime = addMinutes(startTime, requiredMins);
+
+		drink.finishTime = dateFormat(finishTime, 'HH:mm');
+
+		const nextDrinkDateTime = parseDate(`${today}T${nextDrink.time}`);
+		nextDrink.startTime = dateIsAfter(nextDrinkDateTime, finishTime)
+			? nextDrink.time
+			: drink.finishTime;
+
+		return drink;
+	});
+
+	const result = drinks.reduce((drinks, { value, finishTime }) => {
+		const minsRequired = value * 60;
+		const finishDateTime = parseDate(`${today}T${finishTime}`);
+		const timeLeft = differenceInMinutes(finishDateTime, now);
+		const result =
+			timeLeft > minsRequired ? value : timeLeft <= 0 ? 0 : timeLeft / 60;
+		return (drinks += result);
 	}, 0);
+	return result;
 }
 
 export function Section({ children, className }) {
@@ -103,7 +128,7 @@ export default class App extends Component {
 	};
 	addDrink = drink => {
 		this.setState(prevState => {
-			const drinks = prevState.drinks.concat(drink);
+			let drinks = prevState.drinks.concat(drink).map(drinkFactory);
 			idbKeyval.set('drinks', drinks);
 			return {
 				drinks
