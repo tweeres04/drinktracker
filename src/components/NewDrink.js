@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import dateFormat from 'date-fns/format';
 import TimePicker from 'react-datetime';
 import _toNumber from 'lodash/fp/toNumber';
+import subtractDays from 'date-fns/sub_days';
+import closestDate from 'date-fns/closest_to';
 
 import { drinkFactory, Section } from '../App';
 
@@ -10,7 +11,7 @@ export default class NewDrink extends Component {
 		super(props);
 
 		this.state = {
-			time: dateFormat(new Date(), 'HH:mm'),
+			time: new Date(),
 			value: 1
 		};
 
@@ -64,7 +65,10 @@ export default class NewDrink extends Component {
 		);
 	}
 	handleTimeChange(value) {
-		const time = value.format ? value.format('HH:mm') : value;
+		// Handle possibly going past midnight. Just pick whatever day is closest to now. Will need to test this further
+		let time = value.toDate ? value.toDate() : value;
+		const possibleDays = [time, subtractDays(time, 1)];
+		time = closestDate(new Date(), possibleDays);
 		this.setState({ time });
 	}
 	handleChange({ target: { value, name } }) {
@@ -81,6 +85,6 @@ export default class NewDrink extends Component {
 		);
 	}
 	now = () => {
-		this.setState({ time: dateFormat(new Date(), 'HH:mm') });
+		this.setState({ time: new Date() });
 	};
 }

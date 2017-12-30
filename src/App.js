@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import differenceInMinutes from 'date-fns/difference_in_minutes';
-import dateFormat from 'date-fns/format';
-import parseDate from 'date-fns/parse';
 import addMinutes from 'date-fns/add_minutes';
 import dateIsAfter from 'date-fns/is_after';
 import idbKeyval from 'idb-keyval';
@@ -22,8 +20,6 @@ export function drinkFactory({ time, value }) {
 }
 
 export function currentDrinks({ drinks, now = new Date() }) {
-	const today = dateFormat(now, 'YYYY-MM-DD');
-
 	drinks = _cloneDeep(drinks);
 	drinks = _orderBy('time')('asc')(drinks);
 
@@ -32,23 +28,22 @@ export function currentDrinks({ drinks, now = new Date() }) {
 		const nextDrink = drinks[i + 1] || {};
 
 		const requiredMins = value * 60;
-		const startTime = parseDate(`${today}T${drink.startTime || time}`);
+		const startTime = drink.startTime || time;
 		const finishTime = addMinutes(startTime, requiredMins);
 
-		drink.finishTime = dateFormat(finishTime, 'HH:mm');
+		drink.finishTime = finishTime;
 
-		const nextDrinkDateTime = parseDate(`${today}T${nextDrink.time}`);
+		const nextDrinkDateTime = nextDrink.time || now;
 		nextDrink.startTime = dateIsAfter(nextDrinkDateTime, finishTime)
 			? nextDrink.time
-			: drink.finishTime;
+			: finishTime;
 
 		return drink;
 	});
 
 	const result = drinks.reduce((drinks, { value, finishTime }) => {
 		const minsRequired = value * 60;
-		const finishDateTime = parseDate(`${today}T${finishTime}`);
-		const timeLeft = differenceInMinutes(finishDateTime, now);
+		const timeLeft = differenceInMinutes(finishTime, now);
 		const result =
 			timeLeft > minsRequired ? value : timeLeft <= 0 ? 0 : timeLeft / 60;
 		return (drinks += result);

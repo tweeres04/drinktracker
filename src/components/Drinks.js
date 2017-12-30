@@ -1,11 +1,13 @@
 import React from 'react';
 import _orderBy from 'lodash/fp/orderBy';
+import dateFormat from 'date-fns/format';
 
 import { Section } from '../App';
 
 export default function Drinks({ drinks }) {
 	drinks = _orderBy('time')('desc')(drinks);
 	const drinkListItems = drinks.map(({ value, time }, i) => {
+		time = dateFormat(time, 'HH:mm');
 		return (
 			<Section key={i}>
 				<li>
