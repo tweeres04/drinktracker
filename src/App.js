@@ -115,6 +115,15 @@ export default class App extends Component {
 						<div className="container">
 							<div className="content has-text-centered">
 								<p>&copy; 2017 Tweeres Software</p>
+								<p>
+									Icon by{' '}
+									<a
+										href="https://www.flaticon.com/authors/smashicons"
+										title="Smashicons"
+									>
+										Smashicons
+									</a>
+								</p>
 							</div>
 						</div>
 					</footer>
