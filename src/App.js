@@ -11,6 +11,7 @@ import NewDrink from './components/NewDrink';
 
 import 'bulma/css/bulma.css';
 import 'react-datetime/css/react-datetime.css';
+import './App.css';
 
 export function drinkFactory({ time, value }) {
 	return {
@@ -150,7 +151,6 @@ export default class App extends Component {
 				drinks
 			};
 		});
-		console.log('Would remove a drink', drink);
 	};
 	reset = async () => {
 		idbKeyval.clear();

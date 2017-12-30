@@ -14,6 +14,7 @@ export default function Drinks({ drinks, removeDrink }) {
 		return (
 			<Section key={i}>
 				<Tappable
+					component="div"
 					onPress={() => {
 						removeDrink(drink);
 					}}
