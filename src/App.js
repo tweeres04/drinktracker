@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import differenceInMinutes from 'date-fns/difference_in_minutes';
+import differenceInSeconds from 'date-fns/difference_in_seconds';
 import addMinutes from 'date-fns/add_minutes';
 import dateIsAfter from 'date-fns/is_after';
 import idbKeyval from 'idb-keyval';
@@ -43,7 +43,7 @@ export function currentDrinks({ drinks, now = new Date() }) {
 
 	const result = drinks.reduce((drinks, { value, finishTime }) => {
 		const minsRequired = value * 60;
-		const timeLeft = differenceInMinutes(finishTime, now);
+		const timeLeft = differenceInSeconds(finishTime, now) * 60;
 		const result =
 			timeLeft > minsRequired ? value : timeLeft <= 0 ? 0 : timeLeft / 60;
 		return (drinks += result);

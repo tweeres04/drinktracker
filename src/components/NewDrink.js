@@ -72,17 +72,20 @@ export default class NewDrink extends Component {
 		this.setState({ time });
 	}
 	handleChange({ target: { value, name } }) {
-		this.setState({ [name]: _toNumber(value) });
+		value = value == '' ? value : _toNumber(value);
+		this.setState({ [name]: value });
 	}
 	handleSubmit() {
 		const { addDrink } = this.props;
 		const { time, value } = this.state;
-		addDrink(
-			drinkFactory({
-				time,
-				value
-			})
-		);
+		if (value > 0) {
+			addDrink(
+				drinkFactory({
+					time,
+					value
+				})
+			);
+		}
 	}
 	now = () => {
 		this.setState({ time: new Date() });
