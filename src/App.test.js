@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import subMinutes from 'date-fns/sub_minutes';
-import dateFormat from 'date-fns/format';
 
 import App, { drinkFactory, currentDrinks } from './App';
 
