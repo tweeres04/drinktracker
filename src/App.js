@@ -97,7 +97,10 @@ export default class App extends Component {
 					<section className="section">
 						<div className="container">
 							<NewDrink addDrink={this.addDrink} />
-							<Drinks drinks={drinks} />
+							<Drinks
+								drinks={drinks}
+								removeDrink={this.removeDrink}
+							/>
 							<button
 								className="button is-outlined"
 								onClick={this.reset}
@@ -132,12 +135,22 @@ export default class App extends Component {
 	};
 	addDrink = drink => {
 		this.setState(prevState => {
-			let drinks = prevState.drinks.concat(drink).map(drinkFactory);
+			const drinks = prevState.drinks.concat(drink).map(drinkFactory);
 			idbKeyval.set('drinks', drinks);
 			return {
 				drinks
 			};
 		});
+	};
+	removeDrink = drink => {
+		this.setState(prevState => {
+			const drinks = prevState.drinks.filter(d => d != drink);
+			idbKeyval.set('drinks', drinks);
+			return {
+				drinks
+			};
+		});
+		console.log('Would remove a drink', drink);
 	};
 	reset = async () => {
 		idbKeyval.clear();

@@ -5334,6 +5334,10 @@ react-scripts@^1.0.17:
   optionalDependencies:
     fsevents "1.1.2"
 
+react-tappable@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-tappable/-/react-tappable-1.0.2.tgz#bda67f4e3f0e74bf416a4ec8a5885888482e27d4"
+
 react@^16.0.0:
   version "16.0.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.0.0.tgz#ce7df8f1941b036f02b2cca9dbd0cb1f0e855e2d"
