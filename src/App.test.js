@@ -13,15 +13,14 @@ test('renders without crashing', () => {
 test('creates a proper drinkFactory', () => {});
 
 test.only('gives the right number of current drinks', () => {
-	const format = 'HH:mm';
 	const nowDate = new Date();
 
-	const threeHoursAgo = dateFormat(subMinutes(nowDate, 240), format);
-	const twoHoursAgo = dateFormat(subMinutes(nowDate, 120), format);
-	const fiftyFiveMinutesAgo = dateFormat(subMinutes(nowDate, 55), format);
-	const fortyFiveMinutesAgo = dateFormat(subMinutes(nowDate, 45), format);
-	const thirtyMinutesAgo = dateFormat(subMinutes(nowDate, 30), format);
-	const now = dateFormat(nowDate, format);
+	const threeHoursAgo = subMinutes(nowDate, 240);
+	const twoHoursAgo = subMinutes(nowDate, 120);
+	const fiftyFiveMinutesAgo = subMinutes(nowDate, 55);
+	const fortyFiveMinutesAgo = subMinutes(nowDate, 45);
+	const thirtyMinutesAgo = subMinutes(nowDate, 30);
+	const now = nowDate;
 
 	const drinks = [
 		drinkFactory({
@@ -51,7 +50,7 @@ test.only('gives the right number of current drinks', () => {
 	];
 
 	const actual = currentDrinks({ drinks });
-	const expected = 4.066;
+	const expected = 4.083;
 
 	expect(actual).toBeCloseTo(expected);
 });

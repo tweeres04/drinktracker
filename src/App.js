@@ -44,7 +44,7 @@ export function currentDrinks({ drinks, now = new Date() }) {
 
 	const result = drinks.reduce((drinks, { value, finishTime }) => {
 		const minsRequired = value * 60;
-		const timeLeft = differenceInSeconds(finishTime, now) * 60;
+		const timeLeft = differenceInSeconds(finishTime, now) / 60;
 		const result =
 			timeLeft > minsRequired ? value : timeLeft <= 0 ? 0 : timeLeft / 60;
 		return (drinks += result);

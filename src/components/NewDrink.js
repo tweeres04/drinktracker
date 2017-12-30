@@ -112,6 +112,6 @@ export default class NewDrink extends Component {
 		}
 	}
 	now = () => {
-		this.setState({ time: new Date() });
+		this.setState({ time: new Date(), timeError: false });
 	};
 }
