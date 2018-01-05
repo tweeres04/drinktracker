@@ -10,7 +10,7 @@ export default function Drinks({ drinks, removeDrink }) {
 	const drinkListItems = drinks.map((drink, i) => {
 		const { value } = drink;
 		let { time } = drink;
-		time = dateFormat(time, 'HH:mm');
+		time = dateFormat(time, 'h:mm A');
 		return (
 			<Section key={i}>
 				<Tappable

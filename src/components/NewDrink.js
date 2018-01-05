@@ -41,7 +41,7 @@ export default class NewDrink extends Component {
 									}`
 								}}
 								dateFormat={false}
-								timeFormat="HH:mm"
+								timeFormat={true}
 								value={time}
 								onChange={this.handleTimeChange}
 							/>
