@@ -9,8 +9,8 @@ import { Section } from '../App';
 
 function Statistic({ label, value }) {
 	return (
-		<div className="column is-narrow">
-			<div className="is-size-3">{value}</div>
+		<div className="column">
+			<div className="is-size-1">{value}</div>
 			<div className="is-size-7">{label}</div>
 		</div>
 	);
