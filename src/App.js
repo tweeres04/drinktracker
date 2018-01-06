@@ -118,7 +118,7 @@ export default class App extends Component {
 					<footer className="footer">
 						<div className="container">
 							<div className="content has-text-centered">
-								<p>&copy; 2017 Tweeres Software</p>
+								<p>&copy; 2018 Tweeres Software</p>
 								<p>
 									Icon by{' '}
 									<a

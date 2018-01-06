@@ -77,7 +77,7 @@ export default class NewDrink extends Component {
 					className="button is-primary is-fullwidth"
 					onClick={this.handleSubmit}
 				>
-					Drink!
+					Drink
 				</button>
 			</Section>
 		);
