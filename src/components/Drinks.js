@@ -2,8 +2,19 @@ import React from 'react';
 import _orderBy from 'lodash/fp/orderBy';
 import dateFormat from 'date-fns/format';
 import Tappable from 'react-tappable/lib/Tappable';
+import minDate from 'date-fns/min';
+import differenceInMinutes from 'date-fns/difference_in_minutes';
 
 import { Section } from '../App';
+
+function Statistic({ label, value }) {
+	return (
+		<div className="column is-narrow">
+			<div className="is-size-3">{value}</div>
+			<div className="is-size-7">{label}</div>
+		</div>
+	);
+}
 
 export default function Drinks({ drinks, removeDrink }) {
 	drinks = _orderBy('time')('desc')(drinks);
@@ -30,11 +41,22 @@ export default function Drinks({ drinks, removeDrink }) {
 		);
 	});
 	const drinkCount = drinks.reduce((total, { value }) => (total += value), 0);
+	const times = drinks.map(d => d.time);
+	const earliestDate = drinks.length ? minDate(...times) : new Date();
+	const totalHours = differenceInMinutes(new Date(), earliestDate) / 60;
+	const drinksPerHour = totalHours == 0 ? 0 : drinkCount / totalHours;
 	return (
-		<div className="drink-list has-text-centered">
-			<h3 className="title">
-				{drinkCount} Drink{drinkCount == 1 ? '' : 's'}
-			</h3>
+		<div className="has-text-centered">
+			<div className="columns is-centered is-mobile">
+				<Statistic
+					value={drinkCount}
+					label={`Drink${drinkCount == 1 ? '' : 's'}`}
+				/>
+				<Statistic
+					value={drinksPerHour.toFixed(2)}
+					label="Drinks per hour"
+				/>
+			</div>
 			<ul>{drinkListItems}</ul>
 		</div>
 	);
