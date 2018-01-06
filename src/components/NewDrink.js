@@ -57,7 +57,7 @@ export default class NewDrink extends Component {
 					)}
 				</div>
 				<div className="field">
-					<label className="label">Drinks</label>
+					<label className="label">Standard drinks</label>
 					<div className="control">
 						<input
 							className={`input${valueError ? ' is-danger' : ''}`}
