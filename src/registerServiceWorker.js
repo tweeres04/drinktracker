@@ -15,7 +15,7 @@ function NewContentNotification() {
 				window.location.reload();
 			}}
 		>
-			A new version of Drinktracker is available. Click here to refresh.
+			A new version of Drinktracker is available. Tap here to refresh.
 		</div>
 	);
 }
