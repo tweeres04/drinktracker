@@ -74,7 +74,7 @@ export default class NewDrink extends Component {
 					)}
 				</div>
 				<button
-					className="button is-primary is-fullwidth"
+					className="button is-primary is-fullwidth is-medium"
 					onClick={this.handleSubmit}
 				>
 					Drink

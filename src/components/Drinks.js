@@ -47,24 +47,23 @@ export default function Drinks({ drinks, removeDrink }) {
 
 	const earliestDate = drinks.length ? minDate(...times) : new Date();
 	const totalHours = differenceInMinutes(new Date(), earliestDate) / 60;
-	const drinksPerHour = totalHours == 0 ? 0 : drinkCount / totalHours;
+	const drinksPerHour =
+		drinkCount == 0
+			? 0
+			: totalHours == 0 ? '∞' : (drinkCount / totalHours).toFixed(2);
 
-	const latestDate = maxDate(...times);
-	const timeSinceLastDrink = distanceInWordsToNow(latestDate, {
-		addSuffix: true
-	});
+	const latestDate = drinks.length ? maxDate(...times) : null;
+	const timeSinceLastDrink = latestDate
+		? distanceInWordsToNow(latestDate, {
+				addSuffix: true
+			})
+		: 'N/A';
 
 	return (
 		<div className="has-text-centered">
 			<div className="columns is-centered is-mobile">
-				<Statistic
-					value={drinkCount}
-					label={`Drink${drinkCount == 1 ? '' : 's'}`}
-				/>
-				<Statistic
-					value={drinksPerHour.toFixed(2)}
-					label="Drinks per hour"
-				/>
+				<Statistic value={drinkCount} label="Drinks" />
+				<Statistic value={drinksPerHour} label="Drinks per hour" />
 			</div>
 			<div className="columns is-centered is-mobile">
 				<Statistic
