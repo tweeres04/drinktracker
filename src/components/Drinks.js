@@ -3,15 +3,17 @@ import _orderBy from 'lodash/fp/orderBy';
 import dateFormat from 'date-fns/format';
 import Tappable from 'react-tappable/lib/Tappable';
 import minDate from 'date-fns/min';
+import maxDate from 'date-fns/max';
 import differenceInMinutes from 'date-fns/difference_in_minutes';
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 
 import { Section } from '../App';
 
-function Statistic({ label, value }) {
+function Statistic({ label, value, size = 1 }) {
 	return (
 		<div className="column">
-			<div className="is-size-1">{value}</div>
 			<div className="is-size-7">{label}</div>
+			<div className={`is-size-${size}`}>{value}</div>
 		</div>
 	);
 }
@@ -42,9 +44,16 @@ export default function Drinks({ drinks, removeDrink }) {
 	});
 	const drinkCount = drinks.reduce((total, { value }) => (total += value), 0);
 	const times = drinks.map(d => d.time);
+
 	const earliestDate = drinks.length ? minDate(...times) : new Date();
 	const totalHours = differenceInMinutes(new Date(), earliestDate) / 60;
 	const drinksPerHour = totalHours == 0 ? 0 : drinkCount / totalHours;
+
+	const latestDate = maxDate(...times);
+	const timeSinceLastDrink = distanceInWordsToNow(latestDate, {
+		addSuffix: true
+	});
+
 	return (
 		<div className="has-text-centered">
 			<div className="columns is-centered is-mobile">
@@ -55,6 +64,13 @@ export default function Drinks({ drinks, removeDrink }) {
 				<Statistic
 					value={drinksPerHour.toFixed(2)}
 					label="Drinks per hour"
+				/>
+			</div>
+			<div className="columns is-centered is-mobile">
+				<Statistic
+					value={timeSinceLastDrink}
+					label="Last drink"
+					size={3}
 				/>
 			</div>
 			<ul>{drinkListItems}</ul>
