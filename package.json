@@ -21,7 +21,8 @@
 		"debug-test":
 			"node --inspect-brk ./node_modules/react-scripts test --env=jsdom",
 		"eject": "react-scripts eject",
-		"deploy": "yarn build && surge ./build https://drinktracker.surge.sh"
+		"deploy":
+			"yarn build && scp -r build root@drinktracker.tweeres.ca:/var/www/drinktracker && scp etc/drinktracker root@drinktracker.tweeres.ca:/etc/nginx/sites-available && ssh root@drinktracker.tweeres.ca 'nginx -s reload'"
 	},
 	"devDependencies": {
 		"prettier-eslint": "^8.6.2"

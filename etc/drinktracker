@@ -1,0 +1,13 @@
+server {
+	server_name drinktracker.tweeres.ca;
+	return 301 https://$host$request_uri;
+}
+
+server {
+	gzip on;
+	listen 443 ssl http2;
+	server_name drinktracker.tweeres.ca;
+	root /var/www/drinktracker;
+	ssl_certificate /etc/letsencrypt/live/drinktracker.tweeres.ca/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/drinktracker.tweeres.ca/privkey.pem;
+}
