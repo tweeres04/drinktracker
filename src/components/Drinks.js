@@ -1,5 +1,6 @@
 import React from 'react';
 import _orderBy from 'lodash/fp/orderBy';
+import _isInt from 'lodash/fp/isInteger';
 import dateFormat from 'date-fns/format';
 import Tappable from 'react-tappable/lib/Tappable';
 import minDate from 'date-fns/min';
@@ -62,7 +63,12 @@ export default function Drinks({ drinks, removeDrink }) {
 	return (
 		<div className="has-text-centered">
 			<div className="columns is-centered is-mobile">
-				<Statistic value={drinkCount} label="Drinks" />
+				<Statistic
+					value={
+						_isInt(drinkCount) ? drinkCount : drinkCount.toFixed(2)
+					}
+					label="Drinks"
+				/>
 				<Statistic value={drinksPerHour} label="Drinks per hour" />
 			</div>
 			<div className="columns is-centered is-mobile">
