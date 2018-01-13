@@ -1,3 +1,5 @@
+include /etc/nginx/expiresmap.conf;
+
 server {
 	server_name drinktracker.tweeres.ca;
 	return 301 https://$host$request_uri;
@@ -10,6 +12,7 @@ server {
 	root /var/www/drinktracker;
 	ssl_certificate /etc/letsencrypt/live/drinktracker.tweeres.ca/fullchain.pem;
 	ssl_certificate_key /etc/letsencrypt/live/drinktracker.tweeres.ca/privkey.pem;
+	expires $expires;
 
 	location /service-worker.js {
 		expires epoch;
