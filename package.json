@@ -22,7 +22,11 @@
 			"node --inspect-brk ./node_modules/react-scripts test --env=jsdom",
 		"eject": "react-scripts eject",
 		"deploy":
-			"yarn build && scp -r build root@drinktracker.tweeres.ca:/var/www/drinktracker && scp etc/drinktracker root@drinktracker.tweeres.ca:/etc/nginx/sites-available && ssh root@drinktracker.tweeres.ca 'nginx -s reload'"
+			"yarn build && ssh root@drinktracker.tweeres.ca 'rm -r /var/www/drinktracker'; scp -r build root@drinktracker.tweeres.ca:/var/www/drinktracker",
+		"deployconfig":
+			"scp etc/drinktracker root@drinktracker.tweeres.ca:/etc/nginx/sites-available && ssh root@drinktracker.tweeres.ca 'nginx -s reload'",
+		"deploysurge":
+			"yarn build && surge --domain https://drinktracker.surge.sh"
 	},
 	"devDependencies": {
 		"prettier-eslint": "^8.6.2"
