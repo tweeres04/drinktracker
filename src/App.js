@@ -8,6 +8,7 @@ import _cloneDeep from 'lodash/fp/cloneDeep';
 
 import Drinks from './components/Drinks';
 import NewDrink from './components/NewDrink';
+import Help from './Help';
 
 import 'bulma/css/bulma.css';
 import 'react-datetime/css/react-datetime.css';
@@ -83,7 +84,8 @@ function CurrentDrinks({ drinks, now }) {
 export default class App extends Component {
 	state = {
 		drinks: null,
-		now: new Date()
+		now: new Date(),
+		help: false
 	};
 	componentDidMount() {
 		this.loadDrinks();
@@ -95,10 +97,21 @@ export default class App extends Component {
 		clearInterval(this.timeHandle);
 	}
 	render() {
-		const { drinks, now } = this.state;
+		const { drinks, now, help } = this.state;
 		return (
 			drinks && (
 				<div className="App">
+					<button
+						className="button is-text has-text-white"
+						onClick={this.toggleHelp}
+						style={{
+							position: 'absolute',
+							left: 0
+						}}
+					>
+						Help
+					</button>
+					<Help show={help} toggle={this.toggleHelp} />
 					<CurrentDrinks drinks={drinks} now={now} />
 					<section className="section">
 						<div className="container">
@@ -135,6 +148,9 @@ export default class App extends Component {
 			)
 		);
 	}
+	toggleHelp = () => {
+		this.setState(({ help }) => ({ help: !help }));
+	};
 	loadDrinks = async () => {
 		const drinks = (await idbKeyval.get('drinks')) || [];
 		this.setState({ drinks });
