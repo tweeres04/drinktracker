@@ -8,7 +8,7 @@ import _cloneDeep from 'lodash/fp/cloneDeep';
 
 import Drinks from './components/Drinks';
 import NewDrink from './components/NewDrink';
-import Help from './Help';
+import Help from './components/Help';
 
 import 'bulma/css/bulma.css';
 import 'react-datetime/css/react-datetime.css';

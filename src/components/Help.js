@@ -7,7 +7,7 @@ export default function Help({ show, toggle }) {
 				<div className="modal-background" onClick={toggle} />
 				<div className="modal-content">
 					<div className="box content">
-						<h3>How to use Drinktracker</h3>
+						<h3>How to Use Drinktracker</h3>
 						<p>The liver processes 1 standard drink per hour.</p>
 						<p>
 							Enter the number of standard drinks you've consumed
@@ -20,17 +20,22 @@ export default function Help({ show, toggle }) {
 							but even if Drinktracker isn't 100% accurately used,
 							it should still be useful as a means of being more
 							mindful of how many drinks you're having and how
-							fast you're having them
+							fast you're having them.
 						</p>
-						<h5>Your drunk level</h5>
+						<h5>Your Drunk Level</h5>
 						<p>
 							Your actual level of drunkenness will depend on your
 							height, weight, and other factors. For example, 2
 							drinks in one person's body may be a different level
 							of drunkenness than another person at 2 drinks.
 						</p>
+						<h5>Removing a drink</h5>
+						<p>
+							If you make a mistake and need to remove a drink,
+							just long press on it.
+						</p>
 						<p className="is-size-5">Here's to moderation! 🍻</p>
-						<h3>Common Standard drinks</h3>
+						<h3>Common Standard Drinks</h3>
 						<ul>
 							<li>🍺 12oz serving of 5% alcohol - Beer</li>
 							<li>🍷 5oz serving of 12% alcohol - Wine</li>
@@ -38,7 +43,7 @@ export default function Help({ show, toggle }) {
 								🍸 1.5oz serving of 40% alcohol - Hard liquor
 							</li>
 						</ul>
-						<h3>Common non-standard drinks</h3>
+						<h3>Common Non-standard Drinks</h3>
 						<ul>
 							<li>
 								🍺 A 20oz pint of beer - 1.66 standard drinks
