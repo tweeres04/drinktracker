@@ -10,8 +10,8 @@ export function getDrinks({ percent, volume, unit }) {
 	return drinks;
 }
 
-function storeState(state) {
-	return idbKeyval.set('drinkAdderState', state);
+function storeState({ percent, volume, unit }) {
+	return idbKeyval.set('drinkAdderState', { percent, volume, unit });
 }
 
 async function loadState() {
