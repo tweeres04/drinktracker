@@ -6,6 +6,7 @@ import closestDate from 'date-fns/closest_to';
 import isDate from 'date-fns/is_date';
 
 import { drinkFactory, Section } from '../App';
+import DrinkAdder from './DrinkAdder';
 
 export default class NewDrink extends Component {
 	constructor(props) {
@@ -56,16 +57,24 @@ export default class NewDrink extends Component {
 						<p className="help is-danger">Enter a valid time.</p>
 					)}
 				</div>
+				<label className="label">Standard drinks</label>
 				<div className="field">
-					<label className="label">Standard drinks</label>
-					<div className="control">
-						<input
-							className={`input${valueError ? ' is-danger' : ''}`}
-							name="value"
-							type="number"
-							value={value}
-							onChange={this.handleChange}
-						/>
+					<div
+						className="field has-addons"
+						style={{ marginBottom: 0 }}
+					>
+						<div className="control is-expanded">
+							<input
+								className={`input${
+									valueError ? ' is-danger' : ''
+								}`}
+								name="value"
+								type="number"
+								value={value}
+								onChange={this.handleChange}
+							/>
+						</div>
+						<DrinkAdder setDrinks={this.setDrinks} />
 					</div>
 					{valueError && (
 						<p className="help is-danger">
@@ -95,6 +104,9 @@ export default class NewDrink extends Component {
 		value = value == '' ? value : _toNumber(value);
 		this.setState({ [name]: value, valueError: false });
 	}
+	setDrinks = drinks => {
+		this.setState({ value: drinks });
+	};
 	handleSubmit() {
 		const { addDrink } = this.props;
 		const { time, value } = this.state;
