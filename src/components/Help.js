@@ -22,6 +22,13 @@ export default function Help({ show, toggle }) {
 							mindful of how many drinks you're having and how
 							fast you're having them.
 						</p>
+						<h5>Standard Drink Calculator</h5>
+						<p>
+							Use Drinktracker's standard drink calculator to find
+							out how many standard drinks your booze is. Just
+							enter the alcohol percentage and volume of your
+							drink.
+						</p>
 						<h5>Your Drunk Level</h5>
 						<p>
 							Your actual level of drunkenness will depend on your
