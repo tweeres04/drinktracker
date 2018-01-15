@@ -9,20 +9,12 @@ import { drinkFactory, Section } from '../App';
 import DrinkAdder from './DrinkAdder';
 
 export default class NewDrink extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			time: new Date(),
-			timeError: false,
-			value: 1,
-			valueError: false
-		};
-
-		this.handleTimeChange = this.handleTimeChange.bind(this);
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
+	state = {
+		time: new Date(),
+		timeError: false,
+		value: 1,
+		valueError: false
+	};
 	render() {
 		const { time, timeError, value, valueError } = this.state;
 
@@ -91,7 +83,7 @@ export default class NewDrink extends Component {
 			</Section>
 		);
 	}
-	handleTimeChange(value) {
+	handleTimeChange = value => {
 		// Handle possibly going past midnight. Just pick whatever day is closest to now. Will need to test this further
 		let time = value.toDate ? value.toDate() : value;
 		if (isDate(time)) {
@@ -99,15 +91,15 @@ export default class NewDrink extends Component {
 			time = closestDate(new Date(), possibleDays);
 		}
 		this.setState({ time, timeError: false });
-	}
-	handleChange({ target: { value, name } }) {
+	};
+	handleChange = ({ target: { value, name } }) => {
 		value = value == '' ? value : _toNumber(value);
 		this.setState({ [name]: value, valueError: false });
-	}
+	};
 	setDrinks = drinks => {
 		this.setState({ value: drinks });
 	};
-	handleSubmit() {
+	handleSubmit = () => {
 		const { addDrink } = this.props;
 		const { time, value } = this.state;
 		const valueError = value <= 0;
@@ -122,7 +114,7 @@ export default class NewDrink extends Component {
 		} else {
 			this.setState({ timeError, valueError });
 		}
-	}
+	};
 	now = () => {
 		this.setState({ time: new Date(), timeError: false });
 	};
