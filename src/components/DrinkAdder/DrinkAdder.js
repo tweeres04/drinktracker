@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 
 import { Modal } from '.';
 
-console.log(Modal);
-
 export default class DrinkAdder extends Component {
 	state = {
 		show: false
