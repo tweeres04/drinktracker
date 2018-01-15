@@ -115,7 +115,7 @@ export default class DrinkAdder extends Component {
 						</div>
 					)}
 				</div>
-				<button className="modal-close" onClick={close} />
+				<button className="modal-close is-large" onClick={close} />
 			</div>
 		);
 	}
