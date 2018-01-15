@@ -75,12 +75,12 @@ export default class NewDrink extends Component {
 							/>
 						</div>
 						<DrinkAdder setDrinks={this.setDrinks} />
-						{valueError && (
-							<p className="help is-danger">
-								Enter a number greater than 0.
-							</p>
-						)}
 					</div>
+					{valueError && (
+						<p className="help is-danger">
+							Enter a number greater than 0.
+						</p>
+					)}
 				</div>
 				<button
 					className="button is-primary is-fullwidth is-medium"
