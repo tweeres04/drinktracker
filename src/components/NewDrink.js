@@ -15,6 +15,13 @@ export default class NewDrink extends Component {
 		value: 1,
 		valueError: false
 	};
+	componentDidMount = () => {
+		document.addEventListener('visibilitychange', () => {
+			if (!document.hidden) {
+				this.now();
+			}
+		});
+	};
 	render() {
 		const { time, timeError, value, valueError } = this.state;
 
