@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import subMinutes from 'date-fns/sub_minutes';
 
-import App, { drinkFactory, currentDrinks } from './App';
+import App, { drinkFactory } from './App';
+import currentDrinks from './currentDrinks';
 
 test('renders without crashing', () => {
 	const div = document.createElement('div');
