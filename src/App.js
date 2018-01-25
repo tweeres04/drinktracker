@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import idbKeyval from 'idb-keyval';
 
+import currentDrinks from './currentDrinks';
+
 import Drinks from './components/Drinks';
 import NewDrink from './components/NewDrink';
 import Help from './components/Help';
@@ -42,11 +44,16 @@ export default class App extends Component {
 	}
 	render() {
 		const { drinks, now, help } = this.state;
+		const currentDrinksValue = currentDrinks({ drinks, now });
 		return (
 			drinks && (
 				<div className="App">
 					<button
-						className="button is-text has-text-white"
+						className={`button is-text${
+							currentDrinksValue < 6 || currentDrinksValue >= 8
+								? ' has-text-white'
+								: ''
+						}`}
 						onClick={this.toggleHelp}
 						style={{
 							position: 'absolute',
@@ -56,7 +63,10 @@ export default class App extends Component {
 						Help
 					</button>
 					<Help show={help} toggle={this.toggleHelp} />
-					<CurrentDrinks drinks={drinks} now={now} />
+					<CurrentDrinks
+						currentDrinks={currentDrinksValue}
+						now={now}
+					/>
 					<section className="section">
 						<div className="container">
 							<NewDrink addDrink={this.addDrink} />
