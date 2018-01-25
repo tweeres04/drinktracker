@@ -73,6 +73,7 @@ export default class App extends Component {
 							<Drinks
 								drinks={drinks}
 								removeDrink={this.removeDrink}
+								currentDrinks={currentDrinksValue}
 							/>
 							<button
 								className="button is-outlined"
