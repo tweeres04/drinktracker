@@ -18,7 +18,7 @@ async function loadState() {
 			valueError: false
 		},
 		{ loading: false },
-		{ value: await idbKeyval.get('drinkValue') }
+		await idbKeyval.get('newDrinkState')
 	);
 }
 
@@ -120,7 +120,7 @@ export default class NewDrink extends Component {
 		value = value == '' ? value : _toNumber(value);
 		this.setState({ [name]: value, valueError: false });
 		if (name == 'value') {
-			idbKeyval.set('drinkValue', value);
+			idbKeyval.set('newDrinkstate', { value });
 		}
 	};
 	setDrinks = drinks => {
