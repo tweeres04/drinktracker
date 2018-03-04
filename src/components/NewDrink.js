@@ -120,7 +120,7 @@ export default class NewDrink extends Component {
 		value = value == '' ? value : _toNumber(value);
 		this.setState({ [name]: value, valueError: false });
 		if (name == 'value') {
-			idbKeyval.set('newDrinkstate', { value });
+			idbKeyval.set('newDrinkState', { value });
 		}
 	};
 	setDrinks = drinks => {
