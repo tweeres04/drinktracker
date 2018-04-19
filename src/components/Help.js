@@ -11,8 +11,8 @@ export default function Help({ show, toggle }) {
 						<p>The liver processes 1 standard drink per hour.</p>
 						<p>
 							Enter the number of standard drinks you've consumed
-							and at what time, and the app will tell you how many
-							drinks are in your body.
+							and at what time, and Drinktracker will tell you how
+							many drinks are in your body.
 						</p>
 						<h5>Non-standard Drinks</h5>
 						<p>
@@ -35,6 +35,14 @@ export default function Help({ show, toggle }) {
 							height, weight, and other factors. For example, 2
 							drinks in one person's body may be a different level
 							of drunkenness than another person at 2 drinks.
+						</p>
+						<p>
+							To help with moderation, Drinktracker will turn from
+							green to yellow at 6 drinks in your system, and red
+							at 8 drinks in your system. These thresholds are
+							based on tests with users as to when they're likely
+							to be in hangover territory. Your mileage may vary
+							based on your alcohol tolerance.
 						</p>
 						<h5>Removing a drink</h5>
 						<p>
