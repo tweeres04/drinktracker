@@ -5,6 +5,7 @@
 	"dependencies": {
 		"autotrack": "^2.4.1",
 		"bulma": "^0.6.1",
+		"classnames": "^2.2.5",
 		"date-fns": "^1.29.0",
 		"idb-keyval": "^2.3.0",
 		"lodash": "^4.17.4",

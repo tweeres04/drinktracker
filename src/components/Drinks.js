@@ -7,14 +7,16 @@ import minDate from 'date-fns/min';
 import maxDate from 'date-fns/max';
 import differenceInMinutes from 'date-fns/difference_in_minutes';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
+import classnames from 'classnames';
 
 import { Section } from '../App';
 
-function Statistic({ label, value, size = 1 }) {
+function Statistic({ label, value, className, size = 1 }) {
+	const valueClasses = classnames(`is-size-${size}`, className);
 	return (
 		<div className="column">
 			<div className="is-size-7">{label}</div>
-			<div className={`is-size-${size}`}>{value}</div>
+			<div className={valueClasses}>{value}</div>
 		</div>
 	);
 }
@@ -68,12 +70,26 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 		<div className="has-text-centered">
 			<div className="columns is-centered is-mobile">
 				<Statistic value={_round(drinkCount, 2)} label="Drinks" />
-				<Statistic value={drinksPerHour} label="Drinks per hour" />
+				<Statistic
+					value={drinksPerHour}
+					label="Drinks per hour"
+					className={
+						drinksPerHour < 2 && drinksPerHour > 0
+							? 'has-text-success'
+							: ''
+					}
+				/>
 			</div>
 			<div className="columns is-centered is-mobile">
 				<Statistic
 					value={timeSinceLastDrink}
 					label="Last drink"
+					className={
+						latestDate &&
+						differenceInMinutes(new Date(), latestDate) >= 15
+							? 'has-text-success'
+							: ''
+					}
 					size={3}
 				/>
 			</div>
