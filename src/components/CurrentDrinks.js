@@ -11,7 +11,7 @@ function SoberTime({ currentDrinks }) {
 				style={{ justifyContent: 'center' }}
 			>
 				<div className="tag is-light">Sober</div>
-				<div className="tag is-info">{formatDate(soberTime, 'h:m A')}</div>
+				<div className="tag is-info">{formatDate(soberTime, 'h:mm A')}</div>
 			</div>
 		)
 	);
