@@ -1,4 +1,21 @@
 import React from 'react';
+import addHours from 'date-fns/add_hours';
+import formatDate from 'date-fns/format';
+
+function SoberTime({ currentDrinks }) {
+	const soberTime = addHours(new Date(), currentDrinks);
+	return (
+		currentDrinks > 0 && (
+			<div
+				className="tags has-addons has-text-centered"
+				style={{ justifyContent: 'center' }}
+			>
+				<div className="tag is-light">Sober</div>
+				<div className="tag is-info">{formatDate(soberTime, 'h:m A')}</div>
+			</div>
+		)
+	);
+}
 
 export default function CurrentDrinks({ currentDrinks }) {
 	return (
@@ -6,7 +23,9 @@ export default function CurrentDrinks({ currentDrinks }) {
 			className={`hero${
 				currentDrinks >= 8
 					? ' is-danger'
-					: currentDrinks >= 6 ? ' is-warning' : ' is-primary'
+					: currentDrinks >= 6
+						? ' is-warning'
+						: ' is-primary'
 			}`}
 		>
 			<div className="hero-body">
@@ -15,6 +34,7 @@ export default function CurrentDrinks({ currentDrinks }) {
 					<h2 className="subtitle">
 						drink{currentDrinks == 1 ? '' : 's'} in your system
 					</h2>
+					<SoberTime currentDrinks={currentDrinks} />
 				</div>
 			</div>
 		</section>

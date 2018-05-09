@@ -1,7 +1,6 @@
 {
 	"name": "drinktracker",
-	"version": "0.1.0",
-	"private": true,
+	"version": "1.0.0",
 	"dependencies": {
 		"autotrack": "^2.4.1",
 		"bulma": "^0.6.1",
@@ -10,10 +9,10 @@
 		"idb-keyval": "^2.3.0",
 		"lodash": "^4.17.4",
 		"moment": "^2.20.1",
-		"react": "^16.0.0",
+		"react": "^16.3.2",
 		"react-datetime": "^2.11.1",
-		"react-dom": "^16.0.0",
-		"react-scripts": "^1.0.17",
+		"react-dom": "^16.3.2",
+		"react-scripts": "^1.1.4",
 		"react-tappable": "^1.0.2",
 		"source-map-explorer": "^1.5.0"
 	},
@@ -21,10 +20,13 @@
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test --env=jsdom",
-		"debug-test": "node --inspect-brk ./node_modules/react-scripts test --env=jsdom",
+		"debug-test":
+			"node --inspect-brk ./node_modules/react-scripts test --env=jsdom",
 		"eject": "react-scripts eject",
-		"deploy": "yarn build && ssh root@drinktracker.tweeres.ca 'rm -r /var/www/drinktracker'; scp -r build root@drinktracker.tweeres.ca:/var/www/drinktracker",
-		"deployconfig": "scp etc/drinktracker root@drinktracker.tweeres.ca:/etc/nginx/sites-available && ssh root@drinktracker.tweeres.ca 'nginx -s reload'",
+		"deploy":
+			"yarn build && ssh root@drinktracker.tweeres.ca 'rm -r /var/www/drinktracker'; scp -r build root@drinktracker.tweeres.ca:/var/www/drinktracker",
+		"deployconfig":
+			"scp etc/drinktracker root@drinktracker.tweeres.ca:/etc/nginx/sites-available && ssh root@drinktracker.tweeres.ca 'nginx -s reload'",
 		"deploysurge": "yarn build && surge --domain https://drinktracker.surge.sh",
 		"analyze": "source-map-explorer build/static/js/main.*",
 		"storybook": "start-storybook -p 9009 -s public",
