@@ -10,16 +10,17 @@ import { drinkFactory, Section } from '../App';
 import DrinkAdder from './DrinkAdder';
 
 async function loadState() {
-	return Object.assign(
-		{
-			time: new Date(),
-			timeError: false,
-			value: 1,
-			valueError: false
-		},
-		{ loading: false },
-		await idbKeyval.get('newDrinkState')
-	);
+	const defaultState = {
+		time: new Date(),
+		timeError: false,
+		value: 1,
+		valueError: false,
+		loading: false
+	};
+	return {
+		...defaultState,
+		...(await idbKeyval.get('newDrinkState'))
+	};
 }
 
 export default class NewDrink extends Component {
@@ -43,16 +44,11 @@ export default class NewDrink extends Component {
 				<Section>
 					<label className="label">Time</label>
 					<div className="field">
-						<div
-							className="field has-addons"
-							style={{ marginBottom: 0 }}
-						>
+						<div className="field has-addons" style={{ marginBottom: 0 }}>
 							<div className="control is-expanded">
 								<TimePicker
 									inputProps={{
-										className: `input${
-											timeError ? ' is-danger' : ''
-										}`
+										className: `input${timeError ? ' is-danger' : ''}`
 									}}
 									dateFormat={false}
 									timeFormat={true}
@@ -66,23 +62,14 @@ export default class NewDrink extends Component {
 								</button>
 							</div>
 						</div>
-						{timeError && (
-							<p className="help is-danger">
-								Enter a valid time.
-							</p>
-						)}
+						{timeError && <p className="help is-danger">Enter a valid time.</p>}
 					</div>
 					<label className="label">Standard drinks</label>
 					<div className="field">
-						<div
-							className="field has-addons"
-							style={{ marginBottom: 0 }}
-						>
+						<div className="field has-addons" style={{ marginBottom: 0 }}>
 							<div className="control is-expanded">
 								<input
-									className={`input${
-										valueError ? ' is-danger' : ''
-									}`}
+									className={`input${valueError ? ' is-danger' : ''}`}
 									name="value"
 									type="number"
 									value={value}
@@ -92,23 +79,21 @@ export default class NewDrink extends Component {
 							<DrinkAdder setDrinks={this.setDrinks} />
 						</div>
 						{valueError && (
-							<p className="help is-danger">
-								Enter a number greater than 0.
-							</p>
+							<p className="help is-danger">Enter a number greater than 0.</p>
 						)}
 					</div>
 					<button
 						className="button is-primary is-fullwidth is-medium"
 						onClick={this.handleSubmit}
 					>
-						Drink
+						Add Drink
 					</button>
 				</Section>
 			)
 		);
 	}
 	handleTimeChange = value => {
-		// Handle possibly going past midnight. Just pick whatever day is closest to now. Will need to test this further
+		// Handle possibly going past midnight. Just pick whatever day is closest to now.
 		let time = value.toDate ? value.toDate() : value;
 		if (isDate(time)) {
 			const possibleDays = [time, subtractDays(time, 1)];
