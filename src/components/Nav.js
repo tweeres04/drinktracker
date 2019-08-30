@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
-export default function Nav({ menu, toggleMenu }) {
+export default function Nav({ menu, toggleMenu, colourClass }) {
 	return (
-		<nav className="navbar is-primary">
+		<nav className={classnames('navbar is-primary', colourClass)}>
 			<div className="navbar-brand">
 				<Link className="navbar-item" to="/">
 					Drinktracker
@@ -26,7 +26,7 @@ export default function Nav({ menu, toggleMenu }) {
 						Help
 					</Link>
 					<a href={process.env.REACT_APP_FEEDBACK_FORM} className="navbar-item">
-						Feedback
+						Submit Feedback
 					</a>
 				</div>
 			</div>

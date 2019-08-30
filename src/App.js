@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import idbKeyval from 'idb-keyval';
 
-import Nav from './components/Nav';
 import Drinktracker from './Drinktracker';
 import Help from './components/Help';
 
@@ -27,18 +26,11 @@ export function Section({ children, className }) {
 
 export default class App extends Component {
 	state = {
-		menu: false,
 		seenHelp: true
 	};
 	componentDidMount() {
 		this.showHelpIfFirstVisit();
 	}
-	toggleMenu = () => {
-		const { menu } = this.state;
-		this.setState({
-			menu: !menu
-		});
-	};
 	showHelpIfFirstVisit = async () => {
 		const seenHelp = await idbKeyval.get('seenHelp');
 		if (!seenHelp) {
@@ -47,18 +39,10 @@ export default class App extends Component {
 		}
 	};
 	render() {
-		const { menu, seenHelp } = this.state;
+		const { seenHelp } = this.state;
 		return (
 			<Router>
-				<div
-					className="App"
-					onClick={e => {
-						if (menu) {
-							this.toggleMenu();
-						}
-					}}
-				>
-					<Nav menu={menu} toggleMenu={this.toggleMenu} />
+				<div className="App">
 					{seenHelp || <Redirect to="/help" />}
 					<Route
 						path="/help"

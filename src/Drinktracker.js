@@ -1,9 +1,11 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
+import classnames from 'classnames';
 
 import idbKeyval from 'idb-keyval';
 
 import currentDrinks from './currentDrinks';
 
+import Nav from './components/Nav';
 import CurrentDrinks from './components/CurrentDrinks';
 import NewDrink from './components/NewDrink';
 import Drinks from './components/Drinks';
@@ -14,7 +16,7 @@ export default class Drinktracker extends Component {
 	state = {
 		drinks: null,
 		now: new Date(),
-		help: false
+		menu: false
 	};
 	componentDidMount() {
 		this.loadDrinks();
@@ -25,8 +27,11 @@ export default class Drinktracker extends Component {
 	componentWillUnmount() {
 		clearInterval(this.timeHandle);
 	}
-	openFeedbackForm = () => {
-		window.open(process.env.REACT_APP_FEEDBACK_FORM, '_blank');
+	toggleMenu = () => {
+		const { menu } = this.state;
+		this.setState({
+			menu: !menu
+		});
 	};
 	loadDrinks = async () => {
 		const drinks = (await idbKeyval.get('drinks')) || [];
@@ -55,14 +60,35 @@ export default class Drinktracker extends Component {
 		this.setState({ drinks: [] });
 	};
 	render() {
-		const { drinks, now } = this.state;
+		const { drinks, now, menu } = this.state;
 		const currentDrinksValue = currentDrinks({ drinks, now });
+		const danger = currentDrinksValue >= 8;
+		const warning = currentDrinksValue >= 6 && currentDrinksValue < 8;
+		const colourClass = classnames({
+			'is-warning': warning,
+			'is-danger': danger
+		});
 		return (
-			<Fragment>
-				<CurrentDrinks currentDrinks={currentDrinksValue} now={now} />
+			<div
+				onClick={() => {
+					if (menu) {
+						this.toggleMenu();
+					}
+				}}
+			>
+				<Nav
+					menu={menu}
+					toggleMenu={this.toggleMenu}
+					colourClass={colourClass}
+				/>
+				<CurrentDrinks
+					currentDrinks={currentDrinksValue}
+					now={now}
+					colourClass={colourClass}
+				/>
 				<section className="section">
 					<div className="container">
-						<NewDrink addDrink={this.addDrink} />
+						<NewDrink addDrink={this.addDrink} colourClass={colourClass} />
 						<Drinks
 							drinks={drinks}
 							removeDrink={this.removeDrink}
@@ -92,7 +118,7 @@ export default class Drinktracker extends Component {
 						</div>
 					</div>
 				</footer>
-			</Fragment>
+			</div>
 		);
 	}
 }

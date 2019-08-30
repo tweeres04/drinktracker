@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 import TimePicker from 'react-datetime';
 import _toNumber from 'lodash/fp/toNumber';
 import subtractDays from 'date-fns/sub_days';
@@ -38,6 +39,7 @@ export default class NewDrink extends Component {
 	}
 	render() {
 		const { time, timeError, value, valueError, loading } = this.state;
+		const { colourClass } = this.props;
 
 		return (
 			loading || (
@@ -83,7 +85,10 @@ export default class NewDrink extends Component {
 						)}
 					</div>
 					<button
-						className="button is-primary is-fullwidth is-medium"
+						className={classnames(
+							'button is-primary is-fullwidth is-medium',
+							colourClass
+						)}
 						onClick={this.handleSubmit}
 					>
 						Add Drink
