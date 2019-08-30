@@ -51,6 +51,7 @@ export default class App extends Component {
 	};
 	componentDidMount() {
 		this.loadDrinks();
+		this.showHelpIfFirstVisit();
 		this.timeHandle = setInterval(() => {
 			this.setState({ now: new Date() });
 		}, 30000);
@@ -119,6 +120,13 @@ export default class App extends Component {
 	};
 	openFeedbackForm = () => {
 		window.open(process.env.REACT_APP_FEEDBACK_FORM, '_blank');
+	};
+	showHelpIfFirstVisit = async () => {
+		const seenHelp = await idbKeyval.get('seenHelp');
+		if (!seenHelp) {
+			this.setState({ help: true });
+			idbKeyval.set('seenHelp', true);
+		}
 	};
 	loadDrinks = async () => {
 		const drinks = (await idbKeyval.get('drinks')) || [];
