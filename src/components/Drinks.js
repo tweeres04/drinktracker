@@ -5,8 +5,8 @@ import dateFormat from 'date-fns/format';
 import Tappable from 'react-tappable/lib/Tappable';
 import minDate from 'date-fns/min';
 import maxDate from 'date-fns/max';
-import differenceInMinutes from 'date-fns/difference_in_minutes';
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
+import differenceInMinutes from 'date-fns/differenceInMinutes';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import classnames from 'classnames';
 
 import { Section } from '../App';
@@ -26,7 +26,7 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 	const drinkListItems = drinks.map((drink, i) => {
 		const { value } = drink;
 		let { time } = drink;
-		time = dateFormat(time, 'h:mm A');
+		time = dateFormat(time, 'h:mm a');
 		return (
 			<Section key={i}>
 				<Tappable
@@ -48,8 +48,8 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 	const drinkCount = drinks.reduce((total, { value }) => (total += value), 0);
 	const times = drinks.map(d => d.time);
 
-	const earliestDate = drinks.length ? minDate(...times) : new Date();
-	const latestDate = drinks.length ? maxDate(...times) : null;
+	const earliestDate = drinks.length ? minDate(times) : new Date();
+	const latestDate = drinks.length ? maxDate(times) : null;
 	const totalHours =
 		differenceInMinutes(
 			currentDrinks > 0 ? new Date() : latestDate,
@@ -58,12 +58,14 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 	const drinksPerHour =
 		drinkCount == 0
 			? 0
-			: totalHours == 0 ? '∞' : (drinkCount / totalHours).toFixed(2);
+			: totalHours == 0
+			? '∞'
+			: (drinkCount / totalHours).toFixed(2);
 
 	const timeSinceLastDrink = latestDate
-		? distanceInWordsToNow(latestDate, {
+		? formatDistanceToNow(latestDate, {
 				addSuffix: true
-			})
+		  })
 		: 'N/A';
 
 	return (
@@ -74,9 +76,7 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 					value={drinksPerHour}
 					label="Drinks per hour"
 					className={
-						drinksPerHour < 2 && drinksPerHour > 0
-							? 'has-text-success'
-							: ''
+						drinksPerHour < 2 && drinksPerHour > 0 ? 'has-text-success' : ''
 					}
 				/>
 			</div>
@@ -85,8 +85,7 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 					value={timeSinceLastDrink}
 					label="Last drink"
 					className={
-						latestDate &&
-						differenceInMinutes(new Date(), latestDate) >= 15
+						latestDate && differenceInMinutes(new Date(), latestDate) >= 15
 							? 'has-text-success'
 							: ''
 					}

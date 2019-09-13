@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import _round from 'lodash/round';
-import idbKeyval from 'idb-keyval';
+import { get, set } from 'idb-keyval';
 import 'bulma/css/bulma.css';
 
 export function getDrinks({ percent, volume, unit }) {
 	const alcInStandardDrink =
 		unit == 'ml' ? 17.7441 : unit == 'cl' ? 1.77441 : 0.6;
-	const drinks = _round(percent / 100 * volume / alcInStandardDrink, 2);
+	const drinks = _round(((percent / 100) * volume) / alcInStandardDrink, 2);
 	return drinks;
 }
 
 function storeState({ percent, volume, unit }) {
-	return idbKeyval.set('drinkAdderState', { percent, volume, unit });
+	return set('drinkAdderState', { percent, volume, unit });
 }
 
 async function loadState() {
@@ -22,7 +22,7 @@ async function loadState() {
 			unit: 'oz'
 		},
 		{ loading: false },
-		await idbKeyval.get('drinkAdderState')
+		await get('drinkAdderState')
 	);
 	return state;
 }
@@ -61,10 +61,7 @@ export default class DrinkAdder extends Component {
 									/>
 								</div>
 								<div className="control">
-									<button
-										className="button is-static"
-										tabIndex="-1"
-									>
+									<button className="button is-static" tabIndex="-1">
 										%
 									</button>
 								</div>
@@ -107,9 +104,7 @@ export default class DrinkAdder extends Component {
 									className="button is-primary is-medium is-fullwidth"
 									onClick={this.save}
 								>
-									Use {drinks} standard drink{drinks == 1
-										? ''
-										: 's'}
+									Use {drinks} standard drink{drinks == 1 ? '' : 's'}
 								</button>
 							</div>
 						</div>
@@ -125,7 +120,9 @@ export default class DrinkAdder extends Component {
 		volume =
 			value == 'oz'
 				? volume * unitCoefficient
-				: value == 'ml' ? volume / unitCoefficient : volume;
+				: value == 'ml'
+				? volume / unitCoefficient
+				: volume;
 		volume = _round(volume, 2);
 		this.setState({ unit: value, volume }, () => {});
 	};

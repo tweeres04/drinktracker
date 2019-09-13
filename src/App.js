@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import idbKeyval from 'idb-keyval';
+import { get, set } from 'idb-keyval';
 
 import Drinktracker from './Drinktracker';
 import Help from './components/Help';
@@ -32,10 +32,10 @@ export default class App extends Component {
 		this.showHelpIfFirstVisit();
 	}
 	showHelpIfFirstVisit = async () => {
-		const seenHelp = await idbKeyval.get('seenHelp');
+		const seenHelp = await get('seenHelp');
 		if (!seenHelp) {
 			this.setState({ seenHelp });
-			idbKeyval.set('seenHelp', true);
+			set('seenHelp', true);
 		}
 	};
 	render() {

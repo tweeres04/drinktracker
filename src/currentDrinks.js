@@ -1,9 +1,9 @@
 import _cloneDeep from 'lodash/fp/cloneDeep';
 import _orderBy from 'lodash/fp/orderBy';
 
-import addMinutes from 'date-fns/add_minutes';
-import dateIsAfter from 'date-fns/is_after';
-import differenceInSeconds from 'date-fns/difference_in_seconds';
+import addMinutes from 'date-fns/addMinutes';
+import dateIsAfter from 'date-fns/isAfter';
+import differenceInSeconds from 'date-fns/differenceInSeconds';
 
 export default function currentDrinks({ drinks, now = new Date() }) {
 	drinks = _cloneDeep(drinks);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
-import idbKeyval from 'idb-keyval';
+import { get, set, clear } from 'idb-keyval';
 
 import currentDrinks from './currentDrinks';
 
@@ -34,13 +34,13 @@ export default class Drinktracker extends Component {
 		});
 	};
 	loadDrinks = async () => {
-		const drinks = (await idbKeyval.get('drinks')) || [];
+		const drinks = (await get('drinks')) || [];
 		this.setState({ drinks });
 	};
 	addDrink = drink => {
 		this.setState(prevState => {
 			const drinks = prevState.drinks.concat(drink).map(drinkFactory);
-			idbKeyval.set('drinks', drinks);
+			set('drinks', drinks);
 			return {
 				drinks
 			};
@@ -49,14 +49,14 @@ export default class Drinktracker extends Component {
 	removeDrink = drink => {
 		this.setState(prevState => {
 			const drinks = prevState.drinks.filter(d => d != drink);
-			idbKeyval.set('drinks', drinks);
+			set('drinks', drinks);
 			return {
 				drinks
 			};
 		});
 	};
 	reset = async () => {
-		idbKeyval.clear();
+		clear();
 		this.setState({ drinks: [] });
 	};
 	render() {

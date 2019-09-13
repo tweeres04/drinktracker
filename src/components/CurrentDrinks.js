@@ -1,5 +1,5 @@
 import React from 'react';
-import addHours from 'date-fns/add_hours';
+import addHours from 'date-fns/addHours';
 import formatDate from 'date-fns/format';
 import classnames from 'classnames';
 
@@ -12,7 +12,7 @@ function SoberTime({ currentDrinks }) {
 				style={{ justifyContent: 'center' }}
 			>
 				<div className="tag is-light">Sober</div>
-				<div className="tag is-info">{formatDate(soberTime, 'h:mm A')}</div>
+				<div className="tag is-info">{formatDate(soberTime, 'h:mm a')}</div>
 			</div>
 		)
 	);

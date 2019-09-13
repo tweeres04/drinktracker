@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import TimePicker from 'react-datetime';
 import _toNumber from 'lodash/fp/toNumber';
-import subtractDays from 'date-fns/sub_days';
-import closestDate from 'date-fns/closest_to';
-import isDate from 'date-fns/is_date';
-import idbKeyval from 'idb-keyval';
+import subtractDays from 'date-fns/subDays';
+import closestDate from 'date-fns/closestTo';
+import isDate from 'date-fns/isDate';
+import { get, set } from 'idb-keyval';
 
 import { drinkFactory, Section } from '../App';
 import DrinkAdder from './DrinkAdder';
@@ -20,7 +20,7 @@ async function loadState() {
 	};
 	return {
 		...defaultState,
-		...(await idbKeyval.get('newDrinkState'))
+		...(await get('newDrinkState'))
 	};
 }
 
@@ -110,7 +110,7 @@ export default class NewDrink extends Component {
 		value = value == '' ? value : _toNumber(value);
 		this.setState({ [name]: value, valueError: false });
 		if (name == 'value') {
-			idbKeyval.set('newDrinkState', { value });
+			set('newDrinkState', { value });
 		}
 	};
 	setDrinks = drinks => {
