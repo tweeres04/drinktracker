@@ -27,7 +27,7 @@ async function loadState() {
 	return state;
 }
 
-export default class DrinkAdder extends Component {
+export default class Modal extends Component {
 	state = {
 		loading: true
 	};
@@ -40,10 +40,10 @@ export default class DrinkAdder extends Component {
 	}
 	render() {
 		const { loading, percent, volume, unit } = this.state;
-		const { show, close } = this.props;
+		const { close } = this.props;
 		const drinks = getDrinks({ percent, volume, unit });
 		return (
-			<div className={`modal${show ? ' is-active' : ''}`}>
+			<div className={'modal is-active'}>
 				<div className="modal-background" />
 				<div className="modal-content">
 					{loading || (

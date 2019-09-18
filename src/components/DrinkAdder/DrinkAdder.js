@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, lazy } from 'react';
 
-import { Modal } from '.';
+const Modal = lazy(() => import('./Modal'));
 
 export default class DrinkAdder extends Component {
 	state = {
@@ -9,17 +9,14 @@ export default class DrinkAdder extends Component {
 	render() {
 		const { show } = this.state;
 		const { setDrinks } = this.props;
-		return [
-			<button className="button" key="button" onClick={this.toggleModal}>
-				Calculator
-			</button>,
-			<Modal
-				setDrinks={setDrinks}
-				show={show}
-				close={this.toggleModal}
-				key="modal"
-			/>
-		];
+		return (
+			<>
+				<button className="button" onClick={this.toggleModal}>
+					Calculator
+				</button>
+				{show ? <Modal setDrinks={setDrinks} close={this.toggleModal} /> : null}
+			</>
+		);
 	}
 	toggleModal = () => {
 		this.setState(({ show }) => ({ show: !show }));

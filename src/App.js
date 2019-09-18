@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { get, set } from 'idb-keyval';
 
 import Drinktracker from './Drinktracker';
-import Help from './components/Help';
-import Terms from './components/Terms';
 
 import 'bulma/css/bulma.css';
 import 'react-datetime/css/react-datetime.css';
 import './App.css';
+
+const Help = lazy(() => import('./components/Help'));
+const Terms = lazy(() => import('./components/Terms'));
 
 export function drinkFactory({ time, value }) {
 	return {
@@ -43,33 +44,35 @@ export default class App extends Component {
 	render() {
 		const { seenHelp } = this.state;
 		return (
-			<Router>
-				<div className="App">
-					{seenHelp || <Redirect to="/help" />}
-					<Route
-						path="/help"
-						render={({ history }) => (
-							<Help
-								show
-								toggle={() => {
-									history.push('/');
-								}}
-							/>
-						)}
-					/>
-					<Route
-						path="/terms"
-						render={({ history }) => (
-							<Terms
-								toggle={() => {
-									history.push('/');
-								}}
-							/>
-						)}
-					/>
-					<Route path="/" render={() => <Drinktracker />} />
-				</div>
-			</Router>
+			<Suspense fallback={null}>
+				<Router>
+					<div className="App">
+						{seenHelp || <Redirect to="/help" />}
+						<Route
+							path="/help"
+							render={({ history }) => (
+								<Help
+									show
+									toggle={() => {
+										history.push('/');
+									}}
+								/>
+							)}
+						/>
+						<Route
+							path="/terms"
+							render={({ history }) => (
+								<Terms
+									toggle={() => {
+										history.push('/');
+									}}
+								/>
+							)}
+						/>
+						<Route path="/" render={() => <Drinktracker />} />
+					</div>
+				</Router>
+			</Suspense>
 		);
 	}
 }
