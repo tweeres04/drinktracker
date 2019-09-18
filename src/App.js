@@ -2,7 +2,7 @@ import React, { Component, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { get, set } from 'idb-keyval';
 
-import Drinktracker from './Drinktracker';
+import Drinktracker from './components/Drinktracker';
 
 import 'bulma/css/bulma.css';
 import 'react-datetime/css/react-datetime.css';

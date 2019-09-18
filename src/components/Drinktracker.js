@@ -4,14 +4,14 @@ import classnames from 'classnames';
 
 import { get, set, clear } from 'idb-keyval';
 
-import currentDrinks from './currentDrinks';
+import currentDrinks from '../currentDrinks';
 
-import Nav from './components/Nav';
-import CurrentDrinks from './components/CurrentDrinks';
-import NewDrink from './components/NewDrink';
-import Drinks from './components/Drinks';
+import Nav from './Nav';
+import CurrentDrinks from './CurrentDrinks';
+import NewDrink from './NewDrink';
+import Drinks from './Drinks';
 
-import { drinkFactory } from './App';
+import { drinkFactory } from './../App';
 
 export default class Drinktracker extends Component {
 	state = {
