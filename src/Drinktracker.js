@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
 import { get, set, clear } from 'idb-keyval';
@@ -102,7 +103,11 @@ export default class Drinktracker extends Component {
 				<footer className="footer">
 					<div className="container">
 						<div className="content has-text-centered">
-							<a href={process.env.REACT_APP_FEEDBACK_FORM} target="_blank">
+							<a
+								href={process.env.REACT_APP_FEEDBACK_FORM}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
 								Submit Feedback
 							</a>
 							<p>&copy; Tweeres Software</p>
@@ -114,6 +119,9 @@ export default class Drinktracker extends Component {
 								>
 									Smashicons
 								</a>
+							</p>
+							<p>
+								<Link to="/terms">Terms of Service</Link>
 							</p>
 						</div>
 					</div>

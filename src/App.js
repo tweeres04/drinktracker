@@ -4,6 +4,7 @@ import { get, set } from 'idb-keyval';
 
 import Drinktracker from './Drinktracker';
 import Help from './components/Help';
+import Terms from './components/Terms';
 
 import 'bulma/css/bulma.css';
 import 'react-datetime/css/react-datetime.css';
@@ -26,7 +27,8 @@ export function Section({ children, className }) {
 
 export default class App extends Component {
 	state = {
-		seenHelp: true
+		seenHelp: true,
+		terms: false
 	};
 	componentDidMount() {
 		this.showHelpIfFirstVisit();
@@ -49,6 +51,16 @@ export default class App extends Component {
 						render={({ history }) => (
 							<Help
 								show
+								toggle={() => {
+									history.push('/');
+								}}
+							/>
+						)}
+					/>
+					<Route
+						path="/terms"
+						render={({ history }) => (
+							<Terms
 								toggle={() => {
 									history.push('/');
 								}}
