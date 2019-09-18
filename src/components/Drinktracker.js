@@ -7,6 +7,7 @@ import { get, set, clear } from 'idb-keyval';
 import currentDrinks from '../currentDrinks';
 
 import Nav from './Nav';
+import Tour from './Tour';
 import CurrentDrinks from './CurrentDrinks';
 import NewDrink from './NewDrink';
 import Drinks from './Drinks';
@@ -108,6 +109,7 @@ export default class Drinktracker extends Component {
 					toggleMenu={this.toggleMenu}
 					colourClass={colourClass}
 				/>
+				<Tour />
 				<CurrentDrinks
 					currentDrinks={currentDrinksValue}
 					now={now}
