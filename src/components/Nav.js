@@ -9,6 +9,11 @@ export default function Nav({ menu, toggleMenu, colourClass }) {
 				<Link className="navbar-item" to="/">
 					Drinktracker
 				</Link>
+				<div className="navbar-item">
+					<button className="button is-primary is-inverted is-rounded">
+						Install
+					</button>
+				</div>
 				<div
 					className={classnames('navbar-burger burger', {
 						'is-active': menu
