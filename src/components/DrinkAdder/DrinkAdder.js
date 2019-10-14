@@ -19,6 +19,14 @@ export default class DrinkAdder extends Component {
 		);
 	}
 	toggleModal = () => {
-		this.setState(({ show }) => ({ show: !show }));
+		this.setState(({ show }) => {
+			window.ga(
+				'send',
+				'event',
+				'Drink calculator',
+				`Drink calculator ${show ? 'opened' : 'closed'}`
+			);
+			return { show: !show };
+		});
 	};
 }

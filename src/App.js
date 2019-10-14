@@ -69,7 +69,7 @@ export default class App extends Component {
 								/>
 							)}
 						/>
-						<Route path="/" render={() => <Drinktracker />} />
+						<Route path="/" component={Drinktracker} />
 					</div>
 				</Router>
 			</Suspense>
