@@ -1,53 +1,53 @@
 {
-  "name": "drinktracker",
-  "version": "1.0.0",
-  "dependencies": {
-    "autotrack": "^2.4.1",
-    "bulma": "^0.7.5",
-    "classnames": "^2.2.6",
-    "date-fns": "^2.2.1",
-    "idb-keyval": "^3.2.0",
-    "lodash": "^4.17.15",
-    "moment": "^2.24.0",
-    "react": "^16.9.0",
-    "react-datetime": "^2.16.3",
-    "react-dom": "^16.9.0",
-    "react-router-dom": "^5.0.1",
-    "react-scripts": "^3.1.1",
-    "react-tappable": "^1.0.4",
-    "source-map-explorer": "^2.0.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "debug-test": "node --inspect-brk ./node_modules/react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "deploy": "yarn build && ssh root@drinktracker.tweeres.ca 'rm -r /var/www/drinktracker'; scp -r build root@drinktracker.tweeres.ca:/var/www/drinktracker",
-    "deployconfig": "scp etc/drinktracker root@drinktracker.tweeres.ca:/etc/nginx/sites-available && ssh root@drinktracker.tweeres.ca 'nginx -s reload'",
-    "deploysurge": "yarn build && surge --domain https://drinktracker.surge.sh",
-    "analyze": "source-map-explorer build/static/js/main.*",
-    "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
-  },
-  "devDependencies": {
-    "@storybook/addon-actions": "^5.1.11",
-    "@storybook/addon-links": "^5.1.11",
-    "@storybook/addons": "^5.1.11",
-    "@storybook/react": "^5.1.11",
-    "babel-core": "^6.26.3",
-    "prettier-eslint": "^9.0.0"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+	"name": "drinktracker",
+	"version": "1.0.0",
+	"dependencies": {
+		"autotrack": "^2.4.1",
+		"bulma": "^0.7.5",
+		"classnames": "^2.2.6",
+		"date-fns": "^2.2.1",
+		"idb-keyval": "^3.2.0",
+		"lodash": "^4.17.15",
+		"moment": "^2.24.0",
+		"react": "^16.9.0",
+		"react-datetime": "^2.16.3",
+		"react-dom": "^16.9.0",
+		"react-router-dom": "^5.0.1",
+		"react-scripts": "^3.1.1",
+		"react-tappable": "^1.0.4",
+		"source-map-explorer": "^2.0.1"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build && cp etc/_redirects build",
+		"test": "react-scripts test --env=jsdom",
+		"debug-test": "node --inspect-brk ./node_modules/react-scripts test --env=jsdom",
+		"eject": "react-scripts eject",
+		"deploy": "yarn build && ssh root@drinktracker.tweeres.ca 'rm -r /var/www/drinktracker'; scp -r build root@drinktracker.tweeres.ca:/var/www/drinktracker",
+		"deployconfig": "scp etc/drinktracker root@drinktracker.tweeres.ca:/etc/nginx/sites-available && ssh root@drinktracker.tweeres.ca 'nginx -s reload'",
+		"deploysurge": "yarn build && surge --domain https://drinktracker.surge.sh",
+		"analyze": "source-map-explorer build/static/js/main.*",
+		"storybook": "start-storybook -p 9009 -s public",
+		"build-storybook": "build-storybook -s public"
+	},
+	"devDependencies": {
+		"@storybook/addon-actions": "^5.1.11",
+		"@storybook/addon-links": "^5.1.11",
+		"@storybook/addons": "^5.1.11",
+		"@storybook/react": "^5.1.11",
+		"babel-core": "^6.26.3",
+		"prettier-eslint": "^9.0.0"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	}
 }
