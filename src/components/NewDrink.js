@@ -32,9 +32,7 @@ export default class NewDrink extends Component {
 		const state = await loadState();
 		this.setState(state);
 		document.addEventListener('visibilitychange', () => {
-			if (!document.hidden) {
-				this.now();
-			}
+			this.now();
 		});
 	}
 	render() {
