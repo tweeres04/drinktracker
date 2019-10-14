@@ -135,5 +135,6 @@ export default class Modal extends Component {
 
 		setDrinks(getDrinks({ percent, volume, unit }));
 		close();
+		window.ga('send', 'event', 'Drink calculator', 'Drink calculator used');
 	};
 }

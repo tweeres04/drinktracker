@@ -46,6 +46,7 @@ export default class Drinktracker extends Component {
 				drinks
 			};
 		});
+		window.ga('send', 'event', 'Drinks', 'Drink added');
 	};
 	removeDrink = drink => {
 		this.setState(prevState => {
@@ -55,10 +56,12 @@ export default class Drinktracker extends Component {
 				drinks
 			};
 		});
+		window.ga('send', 'event', 'Drinks', 'Drink removed');
 	};
 	reset = async () => {
 		clear();
 		this.setState({ drinks: [] });
+		window.ga('send', 'event', 'Drinks', 'Drinks cleared');
 	};
 	render() {
 		const { drinks, now, menu } = this.state;
