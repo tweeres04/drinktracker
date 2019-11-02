@@ -23,19 +23,13 @@ export default function Nav({ menu, toggleMenu, colourClass }) {
 								deferredInstallPrompt.prompt();
 								const choiceResult = await deferredInstallPrompt.userChoice;
 								if (choiceResult.outcome === 'accepted') {
-									window.ga(
-										'send',
-										'event',
-										'App install',
-										'Accepted add to home screen'
-									);
+									window.gtag('event', 'Accepted add to home screen', {
+										event_category: 'App install'
+									});
 								} else {
-									window.ga(
-										'send',
-										'event',
-										'App install',
-										'Dismissed add to home screen'
-									);
+									window.gtag('event', 'Dismissed add to home screen', {
+										event_category: 'App install'
+									});
 								}
 								setDeferredInstallPrompt(null);
 							}}

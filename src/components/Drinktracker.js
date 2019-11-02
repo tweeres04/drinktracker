@@ -46,7 +46,9 @@ export default class Drinktracker extends Component {
 				drinks
 			};
 		});
-		window.ga('send', 'event', 'Drinks', 'Drink added');
+		window.gtag('event', 'Drink added', {
+			event_category: 'Drinks'
+		});
 	};
 	removeDrink = drink => {
 		this.setState(prevState => {
@@ -56,12 +58,16 @@ export default class Drinktracker extends Component {
 				drinks
 			};
 		});
-		window.ga('send', 'event', 'Drinks', 'Drink removed');
+		window.gtag('event', 'Drink removed', {
+			event_category: 'Drinks'
+		});
 	};
 	reset = async () => {
 		clear();
 		this.setState({ drinks: [] });
-		window.ga('send', 'event', 'Drinks', 'Drinks cleared');
+		window.gtag('event', 'Drinks cleared', {
+			event_category: 'Drinks'
+		});
 	};
 	render() {
 		const { drinks, now, menu } = this.state;

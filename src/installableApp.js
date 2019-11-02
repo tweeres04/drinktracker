@@ -3,18 +3,24 @@ export default function installableApp() {
 		window.addEventListener('beforeinstallprompt', e => {
 			e.preventDefault();
 			resolve(e);
-			window.ga('send', 'event', 'App install', 'App can be installed');
+			window.gtag('event', 'App can be installed', {
+				event_category: 'App install'
+			});
 		});
 	});
 
 	window.addEventListener('appinstalled', () => {
-		window.ga('send', 'event', 'App install', 'App installed');
+		window.gtag('event', 'App installed', {
+			event_category: 'App install'
+		});
 	});
 
 	if (
 		window.matchMedia('(display-mode: standalone)').matches ||
 		window.navigator.standalone === true
 	) {
-		window.ga('send', 'event', 'App install', 'App launched in standalone');
+		window.gtag('event', 'App launched in standalone', {
+			event_category: 'App install'
+		});
 	}
 }
