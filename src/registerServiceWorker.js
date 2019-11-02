@@ -7,7 +7,6 @@ function NewContentNotification() {
 			style={{
 				position: 'fixed',
 				bottom: 0,
-				cursor: 'pointer',
 				width: '100%'
 			}}
 			className="notification is-info"
