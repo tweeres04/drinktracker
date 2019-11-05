@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import addHours from 'date-fns/addHours';
 import formatDate from 'date-fns/format';
 import classnames from 'classnames';
+
+import MoreInfoModal from './moreInfoModals/DrinksInYourSystem';
 
 function SoberTime({ currentDrinks }) {
 	const soberTime = addHours(new Date(), currentDrinks);
@@ -19,6 +21,12 @@ function SoberTime({ currentDrinks }) {
 }
 
 export default function CurrentDrinks({ currentDrinks }) {
+	const [showMoreInfo, setShowMoreInfo] = useState(false);
+
+	function toggleMoreInfo() {
+		setShowMoreInfo(!showMoreInfo);
+	}
+
 	const danger = currentDrinks >= 8;
 	const warning = currentDrinks >= 6 && currentDrinks < 8;
 	const messageClasses = classnames('message', {
@@ -32,7 +40,7 @@ export default function CurrentDrinks({ currentDrinks }) {
 			}`}
 		>
 			<div className="hero-body">
-				<div className="container has-text-centered">
+				<div className="container has-text-centered" onClick={toggleMoreInfo}>
 					<h1 className="title">{currentDrinks.toFixed(2)}</h1>
 					<h2 className="subtitle">
 						drink
@@ -48,6 +56,7 @@ export default function CurrentDrinks({ currentDrinks }) {
 					<SoberTime currentDrinks={currentDrinks} />
 				</div>
 			</div>
+			{showMoreInfo && <MoreInfoModal toggle={toggleMoreInfo} />}
 		</section>
 	);
 }

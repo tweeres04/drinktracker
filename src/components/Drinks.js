@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import _orderBy from 'lodash/fp/orderBy';
 import _round from 'lodash/round';
 import dateFormat from 'date-fns/format';
@@ -8,14 +8,23 @@ import differenceInMinutes from 'date-fns/differenceInMinutes';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import classnames from 'classnames';
 
+import DrinksPerHour from './moreInfoModals/DrinksPerHour';
+import LastDrink from './moreInfoModals/LastDrink';
+
 import { Section } from '../App';
 
-function Statistic({ label, value, className, size = 1 }) {
+function Statistic({ label, value, className, size = 1, MoreInfo }) {
+	const [showMoreInfo, setShowMoreInfo] = useState(false);
 	const valueClasses = classnames(`is-size-${size}`, className);
+
+	function toggle() {
+		setShowMoreInfo(!showMoreInfo);
+	}
 	return (
-		<div className="column">
+		<div className="column" onClick={toggle}>
 			<div className="is-size-7">{label}</div>
 			<div className={valueClasses}>{value}</div>
+			{showMoreInfo && <MoreInfo toggle={toggle} />}
 		</div>
 	);
 }
@@ -82,6 +91,7 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 					className={
 						drinksPerHour < 2 && drinksPerHour > 0 ? 'has-text-success' : ''
 					}
+					MoreInfo={DrinksPerHour}
 				/>
 			</div>
 			<div className="columns is-centered is-mobile">
@@ -94,6 +104,7 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 							: ''
 					}
 					size={3}
+					MoreInfo={LastDrink}
 				/>
 			</div>
 			<ul>{drinkListItems}</ul>
