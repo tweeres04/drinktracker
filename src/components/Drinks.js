@@ -73,7 +73,7 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 		: 'N/A';
 
 	return (
-		<div className="has-text-centered">
+		<div className="has-text-centered" data-tour="stats">
 			<div className="columns is-centered is-mobile">
 				<Statistic value={_round(drinkCount, 2)} label="Drinks" />
 				<Statistic

@@ -89,6 +89,7 @@ export default class NewDrink extends Component {
 							colourClass
 						)}
 						onClick={this.handleSubmit}
+						data-tour="add-drink"
 					>
 						Add Drink
 					</button>

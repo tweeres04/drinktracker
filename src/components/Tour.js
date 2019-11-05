@@ -22,18 +22,21 @@ export default function Tour() {
 	}, []);
 	const steps = [
 		{
-			target: 'button.button.is-fullwidth',
+			target: '[data-tour=add-drink]',
 			content: 'Try adding a drink!'
 		},
 		{
-			target: '.hero-body .title',
+			target: '[data-tour=current-drinks]',
 			content:
 				'The number of drinks in your system. It goes down as your body processes alcohol (1 standard drink per hour) and goes up when you log drinks.'
 		},
 		{
-			target: deferredInstallPrompt
-				? '.button.is-inverted.is-rounded'
-				: '.field',
+			target: '[data-tour=stats]',
+			content: 'Here are a few extra stats to help keep on top of things!',
+			placement: 'top'
+		},
+		{
+			target: deferredInstallPrompt ? '[data-tour=install]' : '.field',
 			content: deferredInstallPrompt ? (
 				"Install Drinktracker and it'll be easy to find when you need it!"
 			) : (

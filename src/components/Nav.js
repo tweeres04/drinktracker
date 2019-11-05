@@ -33,6 +33,7 @@ export default function Nav({ menu, toggleMenu, colourClass }) {
 								}
 								setDeferredInstallPrompt(null);
 							}}
+							data-tour="install"
 						>
 							Install
 						</button>

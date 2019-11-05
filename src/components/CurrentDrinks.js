@@ -33,7 +33,9 @@ export default function CurrentDrinks({ currentDrinks }) {
 		>
 			<div className="hero-body">
 				<div className="container has-text-centered">
-					<h1 className="title">{currentDrinks.toFixed(2)}</h1>
+					<h1 className="title" data-tour="current-drinks">
+						{currentDrinks.toFixed(2)}
+					</h1>
 					<h2 className="subtitle">
 						drink
 						{currentDrinks == 1 ? '' : 's'} in your system
