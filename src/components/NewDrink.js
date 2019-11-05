@@ -31,9 +31,10 @@ export default class NewDrink extends Component {
 	async componentDidMount() {
 		const state = await loadState();
 		this.setState(state);
-		document.addEventListener('visibilitychange', () => {
-			this.now();
-		});
+		document.addEventListener('visibilitychange', this.now);
+	}
+	componentWillUnmount() {
+		document.removeEventListener('visibilitychange', this.now);
 	}
 	render() {
 		const { time, timeError, value, valueError, loading } = this.state;
