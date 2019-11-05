@@ -2,6 +2,8 @@ import React from 'react';
 import Joyride from 'react-joyride';
 import { useDeferredInstallPrompt } from '../installableApp';
 
+import iosActionImg from '../ios_action.png';
+
 export default function Tour() {
 	const [deferredInstallPrompt] = useDeferredInstallPrompt();
 	const steps = [
@@ -12,16 +14,30 @@ export default function Tour() {
 		{
 			target: '.hero-body .title',
 			content:
-				'This is where the magic happens. This is the current number of drinks in your system. You can use this to track how drunk you are.'
+				'The number of drinks in your system. It goes down as your body processes alcohol (1 standard drink per hour) and goes up when you log drinks.'
 		},
 		{
 			target: deferredInstallPrompt
 				? '.button.is-inverted.is-rounded'
 				: '.field',
-			content: 'Add Drinktracker to your homescreen to access it any time!',
-			styles: {
-				options: { arrowColor: 'rgba(0,0,0,0)' }
-			}
+			content: deferredInstallPrompt ? (
+				"Install Drinktracker and it'll be easy to find when you need it!"
+			) : (
+				<div>
+					<div>
+						<img src={iosActionImg} alt="iOS action" />
+					</div>
+					Add Drinktracker to your homescreen and it'll be easy to find when you
+					need it!
+				</div>
+			),
+			...(deferredInstallPrompt
+				? {}
+				: {
+						styles: {
+							options: { arrowColor: 'rgba(0,0,0,0)' }
+						}
+				  })
 		}
 	];
 
