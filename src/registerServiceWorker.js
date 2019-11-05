@@ -10,9 +10,11 @@ function NewContentNotification() {
 				width: '100%'
 			}}
 			className="notification is-info"
+			onClick={() => {
+				window.location.reload();
+			}}
 		>
-			A new version of Drinktracker is available. Close all tabs and reopen to
-			update.
+			A new version of Drinktracker is available. Tap here or refresh to update.
 		</div>
 	);
 }
