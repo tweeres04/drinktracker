@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 export default function installableApp() {
 	window.deferredInstallPrompt = new Promise(resolve => {
 		window.addEventListener('beforeinstallprompt', e => {
@@ -23,4 +25,16 @@ export default function installableApp() {
 			event_category: 'App install'
 		});
 	}
+}
+
+export function useDeferredInstallPrompt() {
+	const [deferredInstallPrompt, setDeferredInstallPrompt] = useState();
+	useEffect(() => {
+		if (window.deferredInstallPrompt) {
+			window.deferredInstallPrompt.then(e => {
+				setDeferredInstallPrompt(e);
+			});
+		}
+	});
+	return [deferredInstallPrompt, setDeferredInstallPrompt];
 }

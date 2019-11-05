@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
+import { useDeferredInstallPrompt } from '../installableApp';
+
 export default function Nav({ menu, toggleMenu, colourClass }) {
-	const [deferredInstallPrompt, setDeferredInstallPrompt] = useState();
-	useEffect(() => {
-		window.deferredInstallPrompt.then(e => {
-			setDeferredInstallPrompt(e);
-		});
-	}, []);
+	const [
+		deferredInstallPrompt,
+		setDeferredInstallPrompt
+	] = useDeferredInstallPrompt();
 	return (
 		<nav className={classnames('navbar is-primary', colourClass)}>
 			<div className="navbar-brand">
