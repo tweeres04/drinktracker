@@ -1,6 +1,5 @@
 import React, { Component, Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import { get, set } from 'idb-keyval';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Drinktracker from './components/Drinktracker';
 
@@ -27,27 +26,11 @@ export function Section({ children, className }) {
 }
 
 export default class App extends Component {
-	state = {
-		seenHelp: true,
-		terms: false
-	};
-	componentDidMount() {
-		this.showHelpIfFirstVisit();
-	}
-	showHelpIfFirstVisit = async () => {
-		const seenHelp = await get('seenHelp');
-		if (!seenHelp) {
-			this.setState({ seenHelp });
-			set('seenHelp', true);
-		}
-	};
 	render() {
-		const { seenHelp } = this.state;
 		return (
 			<Suspense fallback={null}>
 				<Router>
 					<div className="App">
-						{seenHelp || <Redirect to="/help" />}
 						<Route
 							path="/help"
 							render={({ history }) => (

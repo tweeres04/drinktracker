@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Joyride from 'react-joyride';
+import { get, set } from 'idb-keyval';
+
 import { useDeferredInstallPrompt } from '../installableApp';
 
 import iosActionImg from '../ios_action.png';
 
 export default function Tour() {
 	const [deferredInstallPrompt] = useDeferredInstallPrompt();
+	const [seenHelp, setSeenHelp] = useState(true);
+
+	useEffect(() => {
+		async function getSeenHelpFromStorage() {
+			const seenHelp = await get('seenHelp');
+			if (!seenHelp) {
+				setSeenHelp(seenHelp);
+				set('seenHelp', true);
+			}
+		}
+		getSeenHelpFromStorage();
+	}, []);
 	const steps = [
 		{
 			target: 'button.button.is-fullwidth',
@@ -41,11 +55,10 @@ export default function Tour() {
 		}
 	];
 
-	const showTour = window.location.search.indexOf('tour') !== -1;
-	return showTour ? (
+	return seenHelp ? null : (
 		<Joyride
 			steps={steps}
 			styles={{ options: { primaryColor: 'hsl(204, 71%, 53%)' } }}
 		/>
-	) : null;
+	);
 }
