@@ -123,8 +123,12 @@ export default class Drinktracker extends Component {
 							removeDrink={this.removeDrink}
 							currentDrinks={currentDrinksValue}
 						/>
-						<button className="button is-outlined" onClick={this.reset}>
-							Reset
+						<button
+							className="button is-outlined is-danger"
+							style={{ marginTop: '2rem' }}
+							onClick={this.reset}
+						>
+							Clear drinks
 						</button>
 					</div>
 				</section>

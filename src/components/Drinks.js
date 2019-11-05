@@ -2,7 +2,6 @@ import React from 'react';
 import _orderBy from 'lodash/fp/orderBy';
 import _round from 'lodash/round';
 import dateFormat from 'date-fns/format';
-import Tappable from 'react-tappable/lib/Tappable';
 import minDate from 'date-fns/min';
 import maxDate from 'date-fns/max';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
@@ -29,19 +28,24 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 		time = dateFormat(time, 'h:mm a');
 		return (
 			<Section key={i}>
-				<Tappable
-					component="div"
-					onPress={() => {
-						removeDrink(drink);
-					}}
-				>
-					<li>
+				<li style={{ display: 'flex', alignItems: 'center' }}>
+					<div style={{ flex: 1, textAlign: 'left' }}>
 						<label className="label is-marginless">
 							{value} drink{value == 1 ? '' : 's'} at
 						</label>
 						<div className="is-size-3">{time}</div>
-					</li>
-				</Tappable>
+					</div>
+					<div>
+						<button
+							className="button"
+							onClick={() => {
+								removeDrink(drink);
+							}}
+						>
+							🗑
+						</button>
+					</div>
+				</li>
 			</Section>
 		);
 	});
