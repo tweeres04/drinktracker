@@ -24,7 +24,7 @@ export default function Tour() {
 				"Install Drinktracker and it'll be easy to find when you need it!"
 			) : (
 				<div>
-					<div>
+					<div style={{ marginBottom: '0.5rem' }}>
 						<img src={iosActionImg} alt="iOS action" />
 					</div>
 					Add Drinktracker to your homescreen and it'll be easy to find when you

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
-function NewContentNotification() {
-	return (
+function Notification({ message, dismissible }) {
+	const [shown, setShown] = useState(true);
+	return shown ? (
 		<div
 			style={{
 				position: 'fixed',
@@ -10,12 +11,34 @@ function NewContentNotification() {
 				width: '100%'
 			}}
 			className="notification is-info"
-			onClick={() => {
-				window.location.reload();
-			}}
+			onClick={
+				dismissible
+					? () => {
+							setShown(false);
+					  }
+					: () => {}
+			}
 		>
-			A new version of Drinktracker is available. Tap here or refresh to update.
+			{message}
 		</div>
+	) : null;
+}
+
+function NewContentNotification() {
+	return (
+		<Notification
+			message="A new version of Drinktracker is available. Close Drinktracker and reopen
+			to update."
+		/>
+	);
+}
+
+function ReadyForOfflineNotification() {
+	return (
+		<Notification
+			message="Drinktracker is ready to work offline!"
+			dismissible
+		/>
 	);
 }
 
@@ -87,6 +110,10 @@ function registerValidSW(swUrl) {
 							// It's the perfect time to display a
 							// "Content is cached for offline use." message.
 							console.log('Content is cached for offline use.');
+							ReactDOM.render(
+								<ReadyForOfflineNotification />,
+								document.getElementById('swDiv')
+							);
 						}
 					}
 				};
