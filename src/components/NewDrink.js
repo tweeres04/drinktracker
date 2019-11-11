@@ -134,6 +134,11 @@ export default class NewDrink extends Component {
 		}
 	};
 	now = () => {
+		console.log(
+			new Date().toLocaleString(),
+			'this.now',
+			document.visibilityState
+		);
 		this.setState({ time: new Date(), timeError: false });
 	};
 }
