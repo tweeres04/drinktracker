@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
-import { get, set, clear } from 'idb-keyval';
+import { get, set } from 'idb-keyval';
 
 import currentDrinks from '../currentDrinks';
 
@@ -81,7 +81,7 @@ export default class Drinktracker extends Component {
 		});
 	};
 	reset = async () => {
-		clear();
+		set('drinks', []);
 		this.setState({ drinks: [] });
 		window.gtag('event', 'Drinks cleared', {
 			event_category: 'Drinks'

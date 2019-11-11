@@ -115,6 +115,7 @@ export default class NewDrink extends Component {
 	};
 	setDrinks = drinks => {
 		this.setState({ value: drinks });
+		set('newDrinkState', { value: drinks });
 	};
 	handleSubmit = () => {
 		const { addDrink } = this.props;
