@@ -6,7 +6,9 @@ import { linkTo } from '@storybook/addon-links';
 
 import { Button, Welcome } from '@storybook/react/demo';
 
-import DrinkAdder, { Modal as DrinkAdderModal } from '../components/DrinkAdder';
+import DrinkCalculator, {
+	Modal as DrinkCalculatorModal
+} from '../components/DrinkCalculator';
 
 storiesOf('Welcome', module).add('to Storybook', () => (
 	<Welcome showApp={linkTo('Button')} />
@@ -20,13 +22,13 @@ storiesOf('Button', module)
 		<Button onClick={action('clicked')}>😀 😎 👍 💯</Button>
 	));
 
-storiesOf('drinkAdder', module)
+storiesOf('drinkCalculator', module)
 	.add('modal', () => (
-		<DrinkAdderModal
+		<DrinkCalculatorModal
 			save={drinks => {
 				console.log(drinks);
 			}}
 			show={true}
 		/>
 	))
-	.add('main', () => <DrinkAdder />);
+	.add('main', () => <DrinkCalculator />);

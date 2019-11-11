@@ -11,7 +11,7 @@ export function getDrinks({ percent, volume, unit }) {
 }
 
 function storeState({ percent, volume, unit }) {
-	return set('drinkAdderState', { percent, volume, unit });
+	return set('drinkCalculatorState', { percent, volume, unit });
 }
 
 async function loadState() {
@@ -22,7 +22,7 @@ async function loadState() {
 			unit: 'oz'
 		},
 		{ loading: false },
-		await get('drinkAdderState')
+		await get('drinkCalculatorState')
 	);
 	return state;
 }

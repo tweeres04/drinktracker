@@ -2,7 +2,7 @@ import React, { Component, lazy } from 'react';
 
 const Modal = lazy(() => import('./Modal'));
 
-export default class DrinkAdder extends Component {
+export default class DrinkCalculator extends Component {
 	state = {
 		show: false
 	};

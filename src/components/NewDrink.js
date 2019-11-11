@@ -8,7 +8,7 @@ import isDate from 'date-fns/isDate';
 import { get, set } from 'idb-keyval';
 
 import { drinkFactory, Section } from '../App';
-import DrinkAdder from './DrinkAdder';
+import DrinkCalculator from './DrinkCalculator';
 
 async function loadState() {
 	const defaultState = {
@@ -77,7 +77,7 @@ export default class NewDrink extends Component {
 									onChange={this.handleChange}
 								/>
 							</div>
-							<DrinkAdder setDrinks={this.setDrinks} />
+							<DrinkCalculator setDrinks={this.setDrinks} />
 						</div>
 						{valueError && (
 							<p className="help is-danger">Enter a number greater than 0.</p>
