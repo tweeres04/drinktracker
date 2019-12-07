@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import subMinutes from 'date-fns/sub_minutes';
+import subMinutes from 'date-fns/subMinutes';
 
 import App, { drinkFactory } from './App';
 import currentDrinks from './currentDrinks';
@@ -12,7 +12,7 @@ test('renders without crashing', () => {
 
 test('creates a proper drinkFactory', () => {});
 
-test.only('gives the right number of current drinks', () => {
+test('gives the right number of current drinks', () => {
 	const nowDate = new Date();
 
 	const threeHoursAgo = subMinutes(nowDate, 240);
