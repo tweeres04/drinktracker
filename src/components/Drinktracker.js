@@ -23,23 +23,10 @@ export default class Drinktracker extends Component {
 	componentDidMount() {
 		this.loadDrinks();
 		this.setUpRenderInterval();
-
-		document.addEventListener('visibilitychange', this.visibilityChangeHandler);
 	}
 	componentWillUnmount() {
 		clearInterval(this.timeHandle);
-		document.removeEventListener(
-			'visibilitychange',
-			this.visibilityChangeHandler
-		);
 	}
-	visibilityChangeHandler = () => {
-		if (document.hidden) {
-			clearInterval(this.timeHandle);
-		} else {
-			this.setUpRenderInterval();
-		}
-	};
 	setUpRenderInterval = () => {
 		this.setState({ now: new Date() });
 		this.timeHandle = setInterval(() => {
