@@ -43,13 +43,14 @@ export default class NewDrink extends Component {
 		return (
 			loading || (
 				<Section>
-					<label className="label">Time</label>
+					<label className="label" htmlFor="time">Time</label>
 					<div className="field">
 						<div className="field has-addons" style={{ marginBottom: 0 }}>
 							<div className="control is-expanded">
 								<TimePicker
 									inputProps={{
-										className: `input${timeError ? ' is-danger' : ''}`
+										className: `input${timeError ? ' is-danger' : ''}`,
+										id: 'time'
 									}}
 									dateFormat={false}
 									timeFormat={true}
@@ -65,12 +66,13 @@ export default class NewDrink extends Component {
 						</div>
 						{timeError && <p className="help is-danger">Enter a valid time.</p>}
 					</div>
-					<label className="label">Standard drinks</label>
+					<label className="label" htmlFor="value">Standard drinks</label>
 					<div className="field">
 						<div className="field has-addons" style={{ marginBottom: 0 }}>
 							<div className="control is-expanded">
 								<input
 									className={`input${valueError ? ' is-danger' : ''}`}
+									id="value"
 									name="value"
 									type="number"
 									value={value}
