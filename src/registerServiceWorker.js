@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
-function Notification({ message, dismissible }) {
-	const [shown, setShown] = useState(true);
-	return shown ? (
+function Notification({ message, dismissible, fades }) {
+	const [show, setShow] = useState(true);
+
+	useEffect(() => {
+		setTimeout(() => {
+			if (fades) {
+				setShow(false);
+			}
+		}, 7000)
+	});
+
+	return show ? (
 		<div
 			style={{
 				position: 'fixed',
@@ -14,7 +23,7 @@ function Notification({ message, dismissible }) {
 			onClick={
 				dismissible
 					? () => {
-							setShown(false);
+							setShow(false);
 					  }
 					: () => {}
 			}
@@ -38,6 +47,7 @@ function ReadyForOfflineNotification() {
 		<Notification
 			message="Drinktracker is ready to work offline!"
 			dismissible
+			fades
 		/>
 	);
 }
