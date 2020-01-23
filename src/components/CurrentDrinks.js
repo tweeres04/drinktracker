@@ -1,10 +1,10 @@
 import React from 'react';
-import addHours from 'date-fns/addHours';
+import addMinutes from 'date-fns/addMinutes';
 import formatDate from 'date-fns/format';
 import classnames from 'classnames';
 
 function SoberTime({ currentDrinks }) {
-	const soberTime = addHours(new Date(), currentDrinks);
+	const soberTime = addMinutes(new Date(), currentDrinks * 60);
 	return (
 		currentDrinks > 0 && (
 			<div
