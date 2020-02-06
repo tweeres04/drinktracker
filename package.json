@@ -2,21 +2,24 @@
 	"name": "drinktracker",
 	"version": "1.0.0",
 	"dependencies": {
+		"@fortawesome/fontawesome-svg-core": "^1.2.27",
+		"@fortawesome/free-solid-svg-icons": "^5.12.1",
+		"@fortawesome/react-fontawesome": "^0.1.8",
 		"autotrack": "^2.4.1",
-		"bulma": "^0.7.5",
+		"bulma": "^0.8.0",
 		"classnames": "^2.2.6",
-		"date-fns": "^2.2.1",
+		"date-fns": "^2.9.0",
 		"idb-keyval": "^3.2.0",
 		"lodash": "^4.17.15",
 		"moment": "^2.24.0",
-		"react": "^16.9.0",
+		"react": "^16.12.0",
 		"react-datetime": "^2.16.3",
-		"react-dom": "^16.9.0",
-		"react-joyride": "^2.1.1",
-		"react-router-dom": "^5.0.1",
-		"react-scripts": "^3.1.1",
+		"react-dom": "^16.12.0",
+		"react-joyride": "^2.2.1",
+		"react-router-dom": "^5.1.2",
+		"react-scripts": "^3.3.1",
 		"react-tappable": "^1.0.4",
-		"source-map-explorer": "^2.0.1"
+		"source-map-explorer": "^2.2.2"
 	},
 	"scripts": {
 		"start": "react-scripts start",
@@ -32,12 +35,12 @@
 		"build-storybook": "build-storybook -s public"
 	},
 	"devDependencies": {
-		"@storybook/addon-actions": "^5.1.11",
-		"@storybook/addon-links": "^5.1.11",
-		"@storybook/addons": "^5.1.11",
-		"@storybook/react": "^5.1.11",
+		"@storybook/addon-actions": "^5.3.12",
+		"@storybook/addon-links": "^5.3.12",
+		"@storybook/addons": "^5.3.12",
+		"@storybook/react": "^5.3.12",
 		"babel-core": "^6.26.3",
-		"prettier-eslint": "^9.0.0"
+		"prettier-eslint": "^9.0.1"
 	},
 	"browserslist": {
 		"production": [

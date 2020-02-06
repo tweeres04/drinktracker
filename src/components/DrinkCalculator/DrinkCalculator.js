@@ -1,5 +1,8 @@
 import React, { Component, lazy } from 'react';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalculator } from '@fortawesome/free-solid-svg-icons';
+
 const Modal = lazy(() => import('./Modal'));
 
 export default class DrinkCalculator extends Component {
@@ -11,9 +14,14 @@ export default class DrinkCalculator extends Component {
 		const { setDrinks } = this.props;
 		return (
 			<>
-				<button className="button" onClick={this.toggleModal}>
-					Calculator
-				</button>
+				<div className="control">
+					<button className="button is-info" onClick={this.toggleModal}>
+						<span className="icon">
+							<FontAwesomeIcon icon={faCalculator} />
+						</span>
+						<span>Calculator</span>
+					</button>
+				</div>
 				{show ? <Modal setDrinks={setDrinks} close={this.toggleModal} /> : null}
 			</>
 		);

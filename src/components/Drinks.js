@@ -8,6 +8,9 @@ import differenceInMinutes from 'date-fns/differenceInMinutes';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import classnames from 'classnames';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+
 import { Section } from '../App';
 
 function Statistic({ label, value, className, size = 1 }) {
@@ -37,12 +40,12 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 					</div>
 					<div>
 						<button
-							className="button"
+							className="button is-outlined is-danger"
 							onClick={() => {
 								removeDrink(drink);
 							}}
 						>
-							🗑
+							<FontAwesomeIcon icon={faTrash} />
 						</button>
 					</div>
 				</li>
@@ -62,14 +65,12 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 	const drinksPerHour =
 		drinkCount == 0
 			? 0
-			: totalHours == 0
-			? '∞'
-			: (drinkCount / totalHours).toFixed(2);
+			: totalHours == 0 ? '∞' : (drinkCount / totalHours).toFixed(2);
 
 	const timeSinceLastDrink = latestDate
 		? formatDistanceToNow(latestDate, {
 				addSuffix: true
-		  })
+			})
 		: 'N/A';
 
 	return (

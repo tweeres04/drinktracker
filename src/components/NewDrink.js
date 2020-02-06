@@ -7,6 +7,9 @@ import closestDate from 'date-fns/closestTo';
 import isDate from 'date-fns/isDate';
 import { get, set } from 'idb-keyval';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock, faGlassWhiskey } from '@fortawesome/free-solid-svg-icons';
+
 import { drinkFactory, Section } from '../App';
 import DrinkCalculator from './DrinkCalculator';
 
@@ -43,44 +46,47 @@ export default class NewDrink extends Component {
 		return (
 			loading || (
 				<Section>
-					<label className="label" htmlFor="time">Time</label>
-					<div className="field">
-						<div className="field has-addons" style={{ marginBottom: 0 }}>
-							<div className="control is-expanded">
-								<TimePicker
-									inputProps={{
-										className: `input${timeError ? ' is-danger' : ''}`,
-										id: 'time'
-									}}
-									dateFormat={false}
-									timeFormat={true}
-									value={time}
-									onChange={this.handleTimeChange}
-								/>
-							</div>
-							<div className="control">
-								<button className="button" onClick={this.now}>
-									Now
-								</button>
-							</div>
+					<label className="label" htmlFor="time">
+						Time
+					</label>
+					<div className="field is-grouped">
+						<div className="control is-expanded">
+							<TimePicker
+								inputProps={{
+									className: `input${timeError ? ' is-danger' : ''}`,
+									id: 'time'
+								}}
+								dateFormat={false}
+								timeFormat={true}
+								value={time}
+								onChange={this.handleTimeChange}
+							/>
+						</div>
+						<div className="control">
+							<button className="button is-info is-outlined" onClick={this.now}>
+								<span className="icon">
+									<FontAwesomeIcon icon={faClock} />
+								</span>
+								<span>Now</span>
+							</button>
 						</div>
 						{timeError && <p className="help is-danger">Enter a valid time.</p>}
 					</div>
-					<label className="label" htmlFor="value">Standard drinks</label>
-					<div className="field">
-						<div className="field has-addons" style={{ marginBottom: 0 }}>
-							<div className="control is-expanded">
-								<input
-									className={`input${valueError ? ' is-danger' : ''}`}
-									id="value"
-									name="value"
-									type="number"
-									value={value}
-									onChange={this.handleChange}
-								/>
-							</div>
-							<DrinkCalculator setDrinks={this.setDrinks} />
+					<label className="label" htmlFor="value">
+						Standard drinks
+					</label>
+					<div className="field is-grouped">
+						<div className="control is-expanded">
+							<input
+								className={`input${valueError ? ' is-danger' : ''}`}
+								id="value"
+								name="value"
+								type="number"
+								value={value}
+								onChange={this.handleChange}
+							/>
 						</div>
+						<DrinkCalculator setDrinks={this.setDrinks} />
 						{valueError && (
 							<p className="help is-danger">Enter a number greater than 0.</p>
 						)}
@@ -93,7 +99,10 @@ export default class NewDrink extends Component {
 						onClick={this.handleSubmit}
 						data-tour="add-drink"
 					>
-						Add Drink
+						<span className="icon">
+							<FontAwesomeIcon icon={faGlassWhiskey} />
+						</span>
+						<span>Add Drink</span>
 					</button>
 				</Section>
 			)

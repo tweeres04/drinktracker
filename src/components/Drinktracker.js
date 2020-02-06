@@ -4,6 +4,9 @@ import classnames from 'classnames';
 
 import { get, set } from 'idb-keyval';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
+
 import currentDrinks from '../currentDrinks';
 
 import Nav from './Nav';
@@ -111,11 +114,14 @@ export default class Drinktracker extends Component {
 							currentDrinks={currentDrinksValue}
 						/>
 						<button
-							className="button is-outlined is-danger"
+							className="button is-danger"
 							style={{ marginTop: '2rem' }}
 							onClick={this.reset}
 						>
-							Clear drinks
+							<span className="icon">
+								<FontAwesomeIcon icon={faMinusCircle} />
+							</span>
+							<span>Clear drinks</span>
 						</button>
 					</div>
 				</section>
