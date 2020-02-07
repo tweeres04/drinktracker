@@ -3,7 +3,9 @@ import _round from 'lodash/round';
 import _uniqWith from 'lodash/uniqWith';
 import _isEqual from 'lodash/isEqual';
 import { get, set } from 'idb-keyval';
-import 'bulma/css/bulma.css';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 export function getDrinks({ percent, volume, unit }) {
 	const alcInStandardDrink =
@@ -136,7 +138,12 @@ export default class Modal extends Component {
 										this.save(this.state.currentDrink);
 									}}
 								>
-									Use {drinks} standard drink{drinks == 1 ? '' : 's'}
+									<span className="icon">
+										<FontAwesomeIcon icon={faThumbsUp} />
+									</span>
+									<span>
+										Use {drinks} standard drink{drinks == 1 ? '' : 's'}
+									</span>
 								</button>
 							</div>
 						</div>
