@@ -107,24 +107,27 @@ export default class Modal extends Component {
 									</span>
 								</div>
 							</div>
-							{latestDrinks &&
-								latestDrinks.length && (
-									<div className="field">
-										<label className="label">
-											Recent results (tap to re-use)
-										</label>
-										<div className="tags are-large">
-											{latestDrinks.map(({ percent, volume, unit }) => (
-												<span
-													className="tag is-link is-light"
-													onClick={() => {
-														this.save({ percent, volume, unit });
-													}}
-												>{`${percent}%, ${volume}${unit}`}</span>
-											))}
-										</div>
+							<div className="field">
+								<label className="label">Recent results (tap to re-use)</label>
+								{latestDrinks && latestDrinks.length ? (
+									<div className="tags are-large">
+										{latestDrinks.map(({ percent, volume, unit }) => (
+											<span
+												key={`${percent}${volume}${unit}`}
+												className="tag is-link is-light"
+												onClick={() => {
+													this.save({ percent, volume, unit });
+												}}
+											>{`${percent}%, ${volume}${unit}`}</span>
+										))}
 									</div>
+								) : (
+									<p className="notification">
+										Use this calculator and your most recent 5 results will be
+										reusable here.
+									</p>
 								)}
+							</div>
 							<div className="field">
 								<label className="label">Standard drinks</label>
 								<div className="control is-size-3 has-text-centered">
