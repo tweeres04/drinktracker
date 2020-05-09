@@ -19,25 +19,27 @@ async function loadState() {
 		timeError: false,
 		value: 1,
 		valueError: false,
-		loading: false
+		loading: false,
 	};
 	return {
 		...defaultState,
-		...(await get('newDrinkState'))
+		...(await get('newDrinkState')),
 	};
 }
 
 export default class NewDrink extends Component {
 	state = {
-		loading: true
+		loading: true,
 	};
 	async componentDidMount() {
 		const state = await loadState();
 		this.setState(state);
 		document.addEventListener('visibilitychange', this.now);
+		document.addEventListener('resume', this.now);
 	}
 	componentWillUnmount() {
 		document.removeEventListener('visibilitychange', this.now);
+		document.removeEventListener('resume', this.now);
 	}
 	render() {
 		const { time, timeError, value, valueError, loading } = this.state;
@@ -54,7 +56,7 @@ export default class NewDrink extends Component {
 							<TimePicker
 								inputProps={{
 									className: `input${timeError ? ' is-danger' : ''}`,
-									id: 'time'
+									id: 'time',
 								}}
 								dateFormat={false}
 								timeFormat={true}
@@ -108,7 +110,7 @@ export default class NewDrink extends Component {
 			)
 		);
 	}
-	handleTimeChange = value => {
+	handleTimeChange = (value) => {
 		// Handle possibly going past midnight. Just pick whatever day is closest to now.
 		let time = value.toDate ? value.toDate() : value;
 		if (isDate(time)) {
@@ -124,7 +126,7 @@ export default class NewDrink extends Component {
 			set('newDrinkState', { value });
 		}
 	};
-	setDrinks = drinks => {
+	setDrinks = (drinks) => {
 		this.setState({ value: drinks });
 		set('newDrinkState', { value: drinks });
 	};
@@ -137,7 +139,7 @@ export default class NewDrink extends Component {
 			addDrink(
 				drinkFactory({
 					time,
-					value
+					value,
 				})
 			);
 		} else {
