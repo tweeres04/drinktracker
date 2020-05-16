@@ -21,7 +21,7 @@ export default class Drinktracker extends Component {
 	state = {
 		drinks: null,
 		now: new Date(),
-		menu: false
+		menu: false,
 	};
 	componentDidMount() {
 		this.loadDrinks();
@@ -39,52 +39,52 @@ export default class Drinktracker extends Component {
 	toggleMenu = () => {
 		const { menu } = this.state;
 		this.setState({
-			menu: !menu
+			menu: !menu,
 		});
 	};
 	loadDrinks = async () => {
 		const drinks = (await get('drinks')) || [];
 		this.setState({ drinks });
 	};
-	addDrink = drink => {
-		this.setState(prevState => {
+	addDrink = (drink) => {
+		this.setState((prevState) => {
 			const drinks = prevState.drinks.concat(drink).map(drinkFactory);
 			set('drinks', drinks);
 			return {
-				drinks
+				drinks,
 			};
 		});
 		window.gtag('event', 'Drink added', {
-			event_category: 'Drinks'
+			event_category: 'Drinks',
 		});
 	};
-	removeDrink = drink => {
-		this.setState(prevState => {
-			const drinks = prevState.drinks.filter(d => d != drink);
+	removeDrink = (drink) => {
+		this.setState((prevState) => {
+			const drinks = prevState.drinks.filter((d) => d != drink);
 			set('drinks', drinks);
 			return {
-				drinks
+				drinks,
 			};
 		});
 		window.gtag('event', 'Drink removed', {
-			event_category: 'Drinks'
+			event_category: 'Drinks',
 		});
 	};
 	reset = async () => {
 		set('drinks', []);
 		this.setState({ drinks: [] });
 		window.gtag('event', 'Drinks cleared', {
-			event_category: 'Drinks'
+			event_category: 'Drinks',
 		});
 	};
 	render() {
 		const { drinks, now, menu } = this.state;
 		const currentDrinksValue = currentDrinks({ drinks, now });
-		const danger = currentDrinksValue >= 8;
-		const warning = currentDrinksValue >= 6 && currentDrinksValue < 8;
+		const danger = currentDrinksValue >= 6;
+		const warning = currentDrinksValue >= 4 && currentDrinksValue < 6;
 		const colourClass = classnames({
 			'is-warning': warning,
-			'is-danger': danger
+			'is-danger': danger,
 		});
 		return (
 			<div

@@ -19,11 +19,11 @@ function SoberTime({ currentDrinks }) {
 }
 
 export default function CurrentDrinks({ currentDrinks }) {
-	const danger = currentDrinks >= 8;
-	const warning = currentDrinks >= 6 && currentDrinks < 8;
+	const danger = currentDrinks >= 6;
+	const warning = currentDrinks >= 4 && currentDrinks < 6;
 	const messageClasses = classnames('message', {
 		'is-warning': warning,
-		'is-danger': danger
+		'is-danger': danger,
 	});
 	return (
 		<section
