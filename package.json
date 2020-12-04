@@ -28,9 +28,6 @@
 		"test": "react-scripts test --env=jsdom",
 		"debug-test": "node --inspect-brk ./node_modules/react-scripts test --env=jsdom",
 		"eject": "react-scripts eject",
-		"deploy": "yarn build && ssh root@drinktracker.tweeres.ca 'rm -r /var/www/drinktracker'; scp -r build root@drinktracker.tweeres.ca:/var/www/drinktracker",
-		"deployconfig": "scp etc/drinktracker root@drinktracker.tweeres.ca:/etc/nginx/sites-available && ssh root@drinktracker.tweeres.ca 'nginx -s reload'",
-		"deploysurge": "yarn build && surge --domain https://drinktracker.surge.sh",
 		"analyze": "source-map-explorer build/static/js/main.*",
 		"storybook": "start-storybook -p 9009 -s public",
 		"build-storybook": "build-storybook -s public"
