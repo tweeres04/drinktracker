@@ -135,7 +135,7 @@ export default class Drinktracker extends Component {
 							>
 								Submit Feedback
 							</a>
-							<p>&copy; Tweeres Software</p>
+							<p>&copy; <a href="https://tweeres.ca">Tyler Weeres</a></p>
 							<p>
 								Icon by{' '}
 								<a
