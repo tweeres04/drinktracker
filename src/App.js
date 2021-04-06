@@ -3,9 +3,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Drinktracker from './components/Drinktracker';
 
-import 'bulma/css/bulma.css';
 import 'react-datetime/css/react-datetime.css';
-import './App.css';
+import './App.scss';
 
 const Help = lazy(() => import('./components/Help'));
 const Terms = lazy(() => import('./components/Terms'));
