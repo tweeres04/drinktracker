@@ -6,6 +6,7 @@
 		"@fortawesome/free-solid-svg-icons": "^5.12.1",
 		"@fortawesome/react-fontawesome": "^0.1.8",
 		"@fullstory/browser": "^1.4.6",
+		"amplitude-js": "^8.1.0",
 		"autotrack": "^2.4.1",
 		"bulma": "^0.8.0",
 		"classnames": "^2.2.6",
@@ -39,6 +40,7 @@
 		"@storybook/addons": "^5.3.12",
 		"@storybook/react": "^5.3.12",
 		"babel-core": "^6.26.3",
+		"prettier": "^2.2.1",
 		"prettier-eslint": "^9.0.1"
 	},
 	"browserslist": {

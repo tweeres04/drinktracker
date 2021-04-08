@@ -4,6 +4,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import installableApp from './installableApp';
 import * as FS from '@fullstory/browser';
+import amplitude from 'amplitude-js';
 
 installableApp();
 
@@ -12,6 +13,31 @@ if (process.env.NODE_ENV === 'production') {
 		orgId: process.env.REACT_APP_FULLSTORY_ID,
 	});
 }
+
+// From https://web.dev/customize-install/#detect-launch-type
+function getPWADisplayMode() {
+	const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+	if (document.referrer.startsWith('android-app://')) {
+		return 'twa';
+	} else if (navigator.standalone || isStandalone) {
+		return 'standalone';
+	}
+	return 'browser';
+}
+
+function amplitudeSetup() {
+	amplitude.getInstance().init(process.env.REACT_APP_AMPLITUDE_API_KEY);
+
+	window.addEventListener('appinstalled', () => {
+		amplitude.getInstance().logEvent('app_installed');
+	});
+
+	const displayMode = getPWADisplayMode();
+	const identify = new amplitude.Identify().set('display_mode', displayMode);
+	amplitude.getInstance().identify(identify);
+}
+
+amplitudeSetup();
 
 window.addEventListener(
 	'error',
