@@ -4,20 +4,24 @@ import _uniqWith from 'lodash/uniqWith';
 import _isEqual from 'lodash/isEqual';
 import { get, set } from 'idb-keyval';
 
+import amplitude from 'amplitude-js';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 export function getDrinks({ percent, volume, unit }) {
 	const alcInStandardDrink =
 		unit == 'ml' ? 17.7441 : unit == 'cl' ? 1.77441 : 0.6;
-	const drinks = _round(percent / 100 * volume / alcInStandardDrink, 2);
+	const drinks = _round(((percent / 100) * volume) / alcInStandardDrink, 2);
 	return drinks;
 }
 
 async function storeState({ percent, volume, unit }) {
 	let latestDrinks = await get('drinkCalculatorState');
 	latestDrinks = latestDrinks
-		? latestDrinks.length ? latestDrinks : [latestDrinks]
+		? latestDrinks.length
+			? latestDrinks
+			: [latestDrinks]
 		: [];
 	latestDrinks = [{ percent, volume, unit }, ...latestDrinks];
 	latestDrinks = _uniqWith(latestDrinks, _isEqual);
@@ -28,24 +32,26 @@ async function storeState({ percent, volume, unit }) {
 async function loadState() {
 	const latestDrinks = await get('drinkCalculatorState');
 	let latestDrink = latestDrinks
-		? latestDrinks.length ? latestDrinks[0] : latestDrinks
+		? latestDrinks.length
+			? latestDrinks[0]
+			: latestDrinks
 		: {};
 	const state = {
 		currentDrink: {
 			percent: 5,
 			volume: 12,
 			unit: 'oz',
-			...latestDrink
+			...latestDrink,
 		},
 		loading: false,
-		latestDrinks
+		latestDrinks,
 	};
 	return state;
 }
 
 export default class Modal extends Component {
 	state = {
-		loading: true
+		loading: true,
 	};
 	async componentDidMount() {
 		const state = await loadState();
@@ -162,15 +168,17 @@ export default class Modal extends Component {
 		volume =
 			value == 'oz'
 				? volume * unitCoefficient
-				: value == 'ml' ? volume / unitCoefficient : volume;
+				: value == 'ml'
+				? volume / unitCoefficient
+				: volume;
 		volume = _round(volume, 2).toString();
 		this.setState({
-			currentDrink: { ...this.state.currentDrink, unit: value, volume }
+			currentDrink: { ...this.state.currentDrink, unit: value, volume },
 		});
 	};
 	handleChange = ({ target: { value, name } }) => {
 		this.setState({
-			currentDrink: { ...this.state.currentDrink, [name]: value }
+			currentDrink: { ...this.state.currentDrink, [name]: value },
 		});
 	};
 	save = ({ percent, volume, unit }) => {
@@ -179,8 +187,13 @@ export default class Modal extends Component {
 		setDrinks(getDrinks({ percent, volume, unit }));
 		close();
 		storeState({ percent, volume, unit });
+		amplitude.getInstance().logEvent('drink_calculator_used', {
+			percent,
+			volume,
+			unit,
+		});
 		window.gtag('event', 'Drink calculator used', {
-			event_category: 'Drink calculator'
+			event_category: 'Drink calculator',
 		});
 	};
 }

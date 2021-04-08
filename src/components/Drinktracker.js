@@ -7,6 +7,8 @@ import { get, set } from 'idb-keyval';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 
+import amplitude from 'amplitude-js';
+
 import currentDrinks from '../currentDrinks';
 
 import Nav from './Nav';
@@ -54,6 +56,7 @@ export default class Drinktracker extends Component {
 				drinks,
 			};
 		});
+		amplitude.getInstance().logEvent('drink_added', drink);
 		window.gtag('event', 'Drink added', {
 			event_category: 'Drinks',
 		});
@@ -66,6 +69,7 @@ export default class Drinktracker extends Component {
 				drinks,
 			};
 		});
+		amplitude.getInstance().logEvent('drink_removed');
 		window.gtag('event', 'Drink removed', {
 			event_category: 'Drinks',
 		});
@@ -73,6 +77,7 @@ export default class Drinktracker extends Component {
 	reset = async () => {
 		set('drinks', []);
 		this.setState({ drinks: [] });
+		amplitude.getInstance().logEvent('drinks_cleared');
 		window.gtag('event', 'Drinks cleared', {
 			event_category: 'Drinks',
 		});
@@ -135,7 +140,9 @@ export default class Drinktracker extends Component {
 							>
 								Submit Feedback
 							</a>
-							<p>&copy; <a href="https://tweeres.ca">Tyler Weeres</a></p>
+							<p>
+								&copy; <a href="https://tweeres.ca">Tyler Weeres</a>
+							</p>
 							<p>
 								Icon by{' '}
 								<a
