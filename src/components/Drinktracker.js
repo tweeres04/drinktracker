@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
@@ -19,146 +19,138 @@ import Drinks from './Drinks';
 
 import { drinkFactory } from './../App';
 
-export default class Drinktracker extends Component {
-	state = {
-		drinks: null,
-		now: new Date(),
-		menu: false,
-	};
-	componentDidMount() {
-		this.loadDrinks();
-		this.setUpRenderInterval();
+export default function Drinktracker() {
+	const [drinks, setDrinks] = useState();
+	const [now, setNow] = useState(new Date());
+	const [menu, setMenu] = useState(false);
+	const timeHandleRef = useRef(null);
+
+	useEffect(() => {
+		async function loadDrinks() {
+			const drinks = (await get('drinks')) || [];
+			setDrinks(drinks);
+		}
+		loadDrinks();
+	}, []);
+
+	useEffect(() => {
+		function setUpRenderInterval() {
+			setNow(new Date());
+			timeHandleRef.current = setInterval(() => {
+				setNow(new Date());
+			}, 15000);
+		}
+		setUpRenderInterval();
+
+		return function cleanUpRenderInterval() {
+			clearInterval(timeHandleRef.current);
+		};
+	}, []);
+
+	function toggleMenu() {
+		setMenu(!menu);
 	}
-	componentWillUnmount() {
-		clearInterval(this.timeHandle);
-	}
-	setUpRenderInterval = () => {
-		this.setState({ now: new Date() });
-		this.timeHandle = setInterval(() => {
-			this.setState({ now: new Date() });
-		}, 15000);
-	};
-	toggleMenu = () => {
-		const { menu } = this.state;
-		this.setState({
-			menu: !menu,
-		});
-	};
-	loadDrinks = async () => {
-		const drinks = (await get('drinks')) || [];
-		this.setState({ drinks });
-	};
-	addDrink = (drink) => {
-		this.setState((prevState) => {
-			const drinks = prevState.drinks.concat(drink).map(drinkFactory);
+	function addDrink(drink) {
+		setDrinks((prevDrinks) => {
+			const drinks = prevDrinks.concat(drink).map(drinkFactory);
 			set('drinks', drinks);
-			return {
-				drinks,
-			};
+			return drinks;
 		});
 		amplitude.getInstance().logEvent('drink_added', drink);
 		window.gtag('event', 'Drink added', {
 			event_category: 'Drinks',
 		});
-	};
-	removeDrink = (drink) => {
-		this.setState((prevState) => {
-			const drinks = prevState.drinks.filter((d) => d != drink);
+	}
+	function removeDrink(drink) {
+		setDrinks((prevState) => {
+			const drinks = prevState.filter((d) => d != drink);
 			set('drinks', drinks);
-			return {
-				drinks,
-			};
+			return drinks;
 		});
 		amplitude.getInstance().logEvent('drink_removed');
 		window.gtag('event', 'Drink removed', {
 			event_category: 'Drinks',
 		});
-	};
-	reset = async () => {
+	}
+	async function reset() {
 		set('drinks', []);
-		this.setState({ drinks: [] });
+		setDrinks([]);
 		amplitude.getInstance().logEvent('drinks_cleared');
 		window.gtag('event', 'Drinks cleared', {
 			event_category: 'Drinks',
 		});
-	};
-	render() {
-		const { drinks, now, menu } = this.state;
-		const currentDrinksValue = currentDrinks({ drinks, now });
-		const danger = currentDrinksValue >= 6;
-		const warning = currentDrinksValue >= 4 && currentDrinksValue < 6;
-		const colourClass = classnames({
-			'is-warning': warning,
-			'is-danger': danger,
-		});
-		return (
-			<div
-				onClick={() => {
-					if (menu) {
-						this.toggleMenu();
-					}
-				}}
-			>
-				<Nav
-					menu={menu}
-					toggleMenu={this.toggleMenu}
-					colourClass={colourClass}
-				/>
-				<Tour />
-				<CurrentDrinks
-					currentDrinks={currentDrinksValue}
-					now={now}
-					colourClass={colourClass}
-				/>
-				<section className="section">
-					<div className="container">
-						<NewDrink addDrink={this.addDrink} colourClass={colourClass} />
-						<Drinks
-							drinks={drinks}
-							removeDrink={this.removeDrink}
-							currentDrinks={currentDrinksValue}
-						/>
-						<button
-							className="button is-danger"
-							style={{ marginTop: '2rem' }}
-							onClick={this.reset}
-						>
-							<span className="icon">
-								<FontAwesomeIcon icon={faMinusCircle} />
-							</span>
-							<span>Clear drinks</span>
-						</button>
-					</div>
-				</section>
-				<footer className="footer">
-					<div className="container">
-						<div className="content has-text-centered">
-							<a
-								href={process.env.REACT_APP_FEEDBACK_FORM}
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Submit Feedback
-							</a>
-							<p>
-								&copy; <a href="https://tweeres.ca">Tyler Weeres</a>
-							</p>
-							<p>
-								Icon by{' '}
-								<a
-									href="https://www.flaticon.com/authors/smashicons"
-									title="Smashicons"
-								>
-									Smashicons
-								</a>
-							</p>
-							<p>
-								<Link to="/terms">Terms of Service</Link>
-							</p>
-						</div>
-					</div>
-				</footer>
-			</div>
-		);
 	}
+
+	const currentDrinksValue = currentDrinks({ drinks, now });
+	const danger = currentDrinksValue >= 6;
+	const warning = currentDrinksValue >= 4 && currentDrinksValue < 6;
+	const colourClass = classnames({
+		'is-warning': warning,
+		'is-danger': danger,
+	});
+	return (
+		<div
+			onClick={() => {
+				if (menu) {
+					toggleMenu();
+				}
+			}}
+		>
+			<Nav menu={menu} toggleMenu={toggleMenu} colourClass={colourClass} />
+			<Tour />
+			<CurrentDrinks
+				currentDrinks={currentDrinksValue}
+				now={now}
+				colourClass={colourClass}
+			/>
+			<section className="section">
+				<div className="container">
+					<NewDrink addDrink={addDrink} colourClass={colourClass} />
+					<Drinks
+						drinks={drinks}
+						removeDrink={removeDrink}
+						currentDrinks={currentDrinksValue}
+					/>
+					<button
+						className="button is-danger"
+						style={{ marginTop: '2rem' }}
+						onClick={reset}
+					>
+						<span className="icon">
+							<FontAwesomeIcon icon={faMinusCircle} />
+						</span>
+						<span>Clear drinks</span>
+					</button>
+				</div>
+			</section>
+			<footer className="footer">
+				<div className="container">
+					<div className="content has-text-centered">
+						<a
+							href={process.env.REACT_APP_FEEDBACK_FORM}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							Submit Feedback
+						</a>
+						<p>
+							&copy; <a href="https://tweeres.ca">Tyler Weeres</a>
+						</p>
+						<p>
+							Icon by{' '}
+							<a
+								href="https://www.flaticon.com/authors/smashicons"
+								title="Smashicons"
+							>
+								Smashicons
+							</a>
+						</p>
+						<p>
+							<Link to="/terms">Terms of Service</Link>
+						</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+	);
 }
