@@ -19,11 +19,8 @@ import Drinks from './Drinks';
 
 import { drinkFactory } from './../App';
 
-export default function Drinktracker() {
+function useDrinks() {
 	const [drinks, setDrinks] = useState();
-	const [now, setNow] = useState(new Date());
-	const [menu, setMenu] = useState(false);
-	const timeHandleRef = useRef(null);
 
 	useEffect(() => {
 		async function loadDrinks() {
@@ -33,23 +30,6 @@ export default function Drinktracker() {
 		loadDrinks();
 	}, []);
 
-	useEffect(() => {
-		function setUpRenderInterval() {
-			setNow(new Date());
-			timeHandleRef.current = setInterval(() => {
-				setNow(new Date());
-			}, 15000);
-		}
-		setUpRenderInterval();
-
-		return function cleanUpRenderInterval() {
-			clearInterval(timeHandleRef.current);
-		};
-	}, []);
-
-	function toggleMenu() {
-		setMenu(!menu);
-	}
 	function addDrink(drink) {
 		setDrinks((prevDrinks) => {
 			const drinks = prevDrinks.concat(drink).map(drinkFactory);
@@ -72,13 +52,46 @@ export default function Drinktracker() {
 			event_category: 'Drinks',
 		});
 	}
-	async function reset() {
+
+	async function clearDrinks() {
 		set('drinks', []);
 		setDrinks([]);
 		amplitude.getInstance().logEvent('drinks_cleared');
 		window.gtag('event', 'Drinks cleared', {
 			event_category: 'Drinks',
 		});
+	}
+
+	return {
+		drinks,
+		addDrink,
+		removeDrink,
+		clearDrinks,
+	};
+}
+
+export default function Drinktracker() {
+	const { drinks, addDrink, removeDrink, clearDrinks } = useDrinks();
+	const [now, setNow] = useState(new Date());
+	const [menu, setMenu] = useState(false);
+	const timeHandleRef = useRef(null);
+
+	useEffect(() => {
+		function setUpRenderInterval() {
+			setNow(new Date());
+			timeHandleRef.current = setInterval(() => {
+				setNow(new Date());
+			}, 15000);
+		}
+		setUpRenderInterval();
+
+		return function cleanUpRenderInterval() {
+			clearInterval(timeHandleRef.current);
+		};
+	}, []);
+
+	function toggleMenu() {
+		setMenu(!menu);
 	}
 
 	const currentDrinksValue = currentDrinks({ drinks, now });
@@ -114,7 +127,7 @@ export default function Drinktracker() {
 					<button
 						className="button is-danger"
 						style={{ marginTop: '2rem' }}
-						onClick={reset}
+						onClick={clearDrinks}
 					>
 						<span className="icon">
 							<FontAwesomeIcon icon={faMinusCircle} />
