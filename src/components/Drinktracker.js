@@ -15,7 +15,7 @@ import Nav from './Nav';
 import Tour from './Tour';
 import CurrentDrinks from './CurrentDrinks';
 import NewDrink from './NewDrink';
-import Drinks from './Drinks';
+import DrinksList from './DrinksList';
 
 import { drinkFactory } from './../App';
 
@@ -119,7 +119,7 @@ export default function Drinktracker() {
 			<section className="section">
 				<div className="container">
 					<NewDrink addDrink={addDrink} colourClass={colourClass} />
-					<Drinks
+					<DrinksList
 						drinks={drinks}
 						removeDrink={removeDrink}
 						currentDrinks={currentDrinksValue}

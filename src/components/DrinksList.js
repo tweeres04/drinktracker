@@ -23,7 +23,7 @@ function Statistic({ label, value, className, size = 1 }) {
 	);
 }
 
-export default function Drinks({ drinks, removeDrink, currentDrinks }) {
+export default function DrinksList({ drinks, removeDrink, currentDrinks }) {
 	drinks = _orderBy('time')('desc')(drinks);
 	const drinkListItems = drinks.map((drink, i) => {
 		const { value } = drink;
@@ -53,7 +53,7 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 		);
 	});
 	const drinkCount = drinks.reduce((total, { value }) => (total += value), 0);
-	const times = drinks.map(d => d.time);
+	const times = drinks.map((d) => d.time);
 
 	const earliestDate = drinks.length ? minDate(times) : new Date();
 	const latestDate = drinks.length ? maxDate(times) : null;
@@ -65,12 +65,14 @@ export default function Drinks({ drinks, removeDrink, currentDrinks }) {
 	const drinksPerHour =
 		drinkCount == 0
 			? 0
-			: totalHours == 0 ? '∞' : (drinkCount / totalHours).toFixed(2);
+			: totalHours == 0
+			? '∞'
+			: (drinkCount / totalHours).toFixed(2);
 
 	const timeSinceLastDrink = latestDate
 		? formatDistanceToNow(latestDate, {
-				addSuffix: true
-			})
+				addSuffix: true,
+		  })
 		: 'N/A';
 
 	return (
