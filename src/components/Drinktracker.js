@@ -12,7 +12,6 @@ import amplitude from 'amplitude-js';
 import currentDrinks from '../currentDrinks';
 
 import Nav from './Nav';
-import Tour from './Tour';
 import CurrentDrinks from './CurrentDrinks';
 import NewDrink from './NewDrink';
 import DrinksList from './DrinksList';
@@ -110,7 +109,6 @@ export default function Drinktracker() {
 			}}
 		>
 			<Nav menu={menu} toggleMenu={toggleMenu} colourClass={colourClass} />
-			<Tour />
 			<CurrentDrinks
 				currentDrinks={currentDrinksValue}
 				now={now}
