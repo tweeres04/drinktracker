@@ -11,10 +11,12 @@ import amplitude from 'amplitude-js';
 
 import currentDrinks from '../currentDrinks';
 
+import IosShareIcon from './IosShareIcon';
 import Nav from './Nav';
 import CurrentDrinks from './CurrentDrinks';
 import NewDrink from './NewDrink';
 import DrinksList from './DrinksList';
+import { useDeferredInstallPrompt } from '../installableApp';
 
 import { drinkFactory } from './../App';
 
@@ -69,11 +71,81 @@ function useDrinks() {
 	};
 }
 
+function InstallNotification({ deferredInstallPrompt }) {
+	const [showInstallNotification, setShowInstallNotification] = useState(false);
+	const [isIos, setIsIos] = useState(false);
+
+	useEffect(() => {
+		const isStandalone = window.matchMedia('(display-mode: standalone)')
+			.matches;
+		setShowInstallNotification(!isStandalone);
+	}, []);
+
+	useEffect(() => {
+		// From https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent
+		setIsIos(
+			/Mobi/.test(window.navigator.userAgent) &&
+				/AppleWebKit/.test(window.navigator.userAgent) &&
+				!/Chrom/.test(window.navigator.userAgent)
+		);
+	}, []);
+
+	return showInstallNotification ? (
+		<div
+			className={`notification is-primary`}
+			style={{ position: 'fixed', bottom: 0, width: '100%', marginBottom: 0 }}
+		>
+			<button
+				className="delete"
+				onClick={() => {
+					setShowInstallNotification(false);
+				}}
+			></button>
+			<p className="has-text-centered">
+				Install Drinktracker to your home screen for quick access
+			</p>
+			{deferredInstallPrompt ? (
+				<div className="has-text-centered" style={{ marginTop: '0.5rem' }}>
+					<button
+						className={`button is-inverted is-primary`}
+						onClick={async () => {
+							deferredInstallPrompt.prompt();
+							const choiceResult = await deferredInstallPrompt.userChoice;
+							if (choiceResult.outcome === 'accepted') {
+								amplitude.getInstance().logEvent('accepted_add_to_home_screen');
+								window.gtag('event', 'Accepted add to home screen', {
+									event_category: 'App install',
+								});
+							} else {
+								amplitude
+									.getInstance()
+									.logEvent('dismissed_add_to_home_screen');
+								window.gtag('event', 'Dismissed add to home screen', {
+									event_category: 'App install',
+								});
+							}
+						}}
+					>
+						Add to home screen
+					</button>
+				</div>
+			) : isIos ? (
+				<p className="has-text-centered mt-1">
+					Tap the share button (with this icon: <IosShareIcon />
+					), then tap "Add to Home Screen"
+				</p>
+			) : null}
+		</div>
+	) : null;
+}
+
 export default function Drinktracker() {
 	const { drinks, addDrink, removeDrink, clearDrinks } = useDrinks();
 	const [now, setNow] = useState(new Date());
 	const [menu, setMenu] = useState(false);
 	const timeHandleRef = useRef(null);
+
+	const [deferredInstallPrompt] = useDeferredInstallPrompt();
 
 	useEffect(() => {
 		function setUpRenderInterval() {
@@ -134,6 +206,7 @@ export default function Drinktracker() {
 					</button>
 				</div>
 			</section>
+			<InstallNotification deferredInstallPrompt={deferredInstallPrompt} />
 			<footer className="footer">
 				<div className="container">
 					<div className="content has-text-centered">

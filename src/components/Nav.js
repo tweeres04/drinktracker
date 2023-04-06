@@ -1,51 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
-import amplitude from 'amplitude-js';
-
-import { useDeferredInstallPrompt } from '../installableApp';
 
 export default function Nav({ menu, toggleMenu, colourClass }) {
-	const [
-		deferredInstallPrompt,
-		setDeferredInstallPrompt,
-	] = useDeferredInstallPrompt();
 	return (
 		<nav className={classnames('navbar is-primary', colourClass)}>
 			<div className="navbar-brand">
 				<Link className="navbar-item" to="/">
 					Drinktracker
 				</Link>
-				{deferredInstallPrompt && (
-					<div className="navbar-item">
-						<button
-							className="button is-primary is-inverted is-rounded"
-							onClick={async () => {
-								deferredInstallPrompt.prompt();
-								const choiceResult = await deferredInstallPrompt.userChoice;
-								if (choiceResult.outcome === 'accepted') {
-									amplitude
-										.getInstance()
-										.logEvent('accepted_add_to_home_screen');
-									window.gtag('event', 'Accepted add to home screen', {
-										event_category: 'App install',
-									});
-								} else {
-									amplitude
-										.getInstance()
-										.logEvent('dismissed_add_to_home_screen');
-									window.gtag('event', 'Dismissed add to home screen', {
-										event_category: 'App install',
-									});
-								}
-								setDeferredInstallPrompt(null);
-							}}
-							data-tour="install"
-						>
-							Install
-						</button>
-					</div>
-				)}
 				<div
 					className={classnames('navbar-burger burger', {
 						'is-active': menu,
