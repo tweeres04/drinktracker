@@ -76,8 +76,9 @@ function InstallNotification({ deferredInstallPrompt }) {
 	const [isIos, setIsIos] = useState(false);
 
 	useEffect(() => {
-		const isStandalone = window.matchMedia('(display-mode: standalone)')
-			.matches;
+		const isStandalone = window.matchMedia(
+			'(display-mode: standalone)'
+		).matches;
 		setShowInstallNotification(!isStandalone);
 	}, []);
 
@@ -206,7 +207,6 @@ export default function Drinktracker() {
 					</button>
 				</div>
 			</section>
-			<InstallNotification deferredInstallPrompt={deferredInstallPrompt} />
 			<footer className="footer">
 				<div className="container">
 					<div className="content has-text-centered">
@@ -235,6 +235,7 @@ export default function Drinktracker() {
 					</div>
 				</div>
 			</footer>
+			<InstallNotification deferredInstallPrompt={deferredInstallPrompt} />
 		</div>
 	);
 }
