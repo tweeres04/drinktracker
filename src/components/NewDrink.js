@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
-import TimePicker from 'react-datetime';
 import _toNumber from 'lodash/fp/toNumber';
-import subtractDays from 'date-fns/subDays';
-import closestDate from 'date-fns/closestTo';
-import isDate from 'date-fns/isDate';
+import { subDays, closestTo, format, parse, isDate } from 'date-fns';
 import { get, set } from 'idb-keyval';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -53,14 +50,11 @@ export default class NewDrink extends Component {
 					</label>
 					<div className="field is-grouped">
 						<div className="control is-expanded">
-							<TimePicker
-								inputProps={{
-									className: `input${timeError ? ' is-danger' : ''}`,
-									id: 'time',
-								}}
-								dateFormat={false}
-								timeFormat={true}
-								value={time}
+							<input
+								type="time"
+								className={`input${timeError ? ' is-danger' : ''}`}
+								id="time"
+								value={format(time, 'HH:mm')}
 								onChange={this.handleTimeChange}
 							/>
 						</div>
@@ -110,13 +104,14 @@ export default class NewDrink extends Component {
 			)
 		);
 	}
-	handleTimeChange = (value) => {
-		// Handle possibly going past midnight. Just pick whatever day is closest to now.
-		let time = value.toDate ? value.toDate() : value;
-		if (isDate(time)) {
-			const possibleDays = [time, subtractDays(time, 1)];
-			time = closestDate(new Date(), possibleDays);
-		}
+	handleTimeChange = (event) => {
+		const value = event.target.value;
+		let time = parse(value, 'HH:mm', new Date());
+
+		// Handle going past midnight, and then picking a time from the previous day (ex: picking 11:45pm when it's 12:10am). Just pick whatever day is closest to now.
+		const possibleDays = [time, subDays(time, 1)];
+		time = closestTo(new Date(), possibleDays);
+
 		this.setState({ time, timeError: false });
 	};
 	handleChange = ({ target: { value, name } }) => {
