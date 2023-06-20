@@ -18,7 +18,7 @@ function SoberTime({ currentDrinks }) {
 	);
 }
 
-export default function CurrentDrinks({ currentDrinks }) {
+export default function CurrentDrinks({ currentDrinks, setAnchor }) {
 	const danger = currentDrinks >= 6;
 	const warning = currentDrinks >= 4 && currentDrinks < 6;
 	const messageClasses = classnames('message', {
@@ -33,10 +33,8 @@ export default function CurrentDrinks({ currentDrinks }) {
 		>
 			<div className="hero-body">
 				<div className="container has-text-centered">
-					<h1 className="title" data-tour="current-drinks">
-						{currentDrinks.toFixed(2)}
-					</h1>
-					<h2 className="subtitle">
+					<h1 className="title">{currentDrinks.toFixed(2)}</h1>
+					<h2 className="subtitle" ref={setAnchor}>
 						drink
 						{currentDrinks == 1 ? '' : 's'} in your system
 					</h2>

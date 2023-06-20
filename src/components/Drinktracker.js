@@ -4,6 +4,8 @@ import classnames from 'classnames';
 
 import { get, set } from 'idb-keyval';
 
+import { useFloating, FloatingArrow, arrow } from '@floating-ui/react';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 
@@ -140,7 +142,97 @@ function InstallNotification({ deferredInstallPrompt }) {
 	) : null;
 }
 
+function CurrentDrinksExplainer({ anchor, drinks }) {
+	const [show, setShow] = useState(false);
+	const [isNewUser, setIsNewUser] = useState(false);
+	const [step, setStep] = useState(1);
+	const arrowRef = useRef(null);
+	const { refs, floatingStyles, context } = useFloating({
+		elements: { reference: anchor },
+		middleware: [arrow({ element: arrowRef })],
+	});
+
+	useEffect(() => {
+		async function loadIsNewUser() {
+			const results = await Promise.all([
+				get('drinkCalculatorState'),
+				get('drinks'),
+				get('newDrinkState'),
+			]);
+			const noResults = !results.some((r) => r);
+			if (noResults) {
+				setIsNewUser(true);
+			}
+		}
+		loadIsNewUser();
+	}, []);
+
+	useEffect(() => {
+		if (isNewUser && drinks?.length === 1) {
+			setShow(true);
+			anchor.scrollIntoView({ block: 'center' });
+		}
+	}, [anchor, drinks, isNewUser]);
+
+	function stepForward() {
+		if (step === 1) {
+			setStep(2);
+		} else if (step === 2) {
+			setStep(3);
+		} else if (step === 3) {
+			setShow(false);
+			setIsNewUser(false);
+		} else {
+			throw new Error(
+				"CurrentDrinksExplainer - Tried to step forward to a step that doesn't exist"
+			);
+		}
+	}
+
+	return show ? (
+		<div
+			ref={refs.setFloating}
+			style={{ ...floatingStyles, width: '75%', marginTop: '1rem' }}
+			className="notification is-info is-light"
+		>
+			<button className="delete" onClick={stepForward}></button>
+			<div className="content m-0">
+				{step === 1 ? (
+					<p>
+						Nice! You added a drink! This is how many drinks are in your system
+						now.
+					</p>
+				) : step === 2 ? (
+					<p>
+						This number goes down over time. Check back when you're thinking
+						about having another drink.
+					</p>
+				) : step === 3 ? (
+					<p>
+						I recommend aiming to stay below 2.0 to start. Over time, you'll get
+						a sense of what number works for you.
+					</p>
+				) : null}
+				<div>
+					<button
+						className="button is-info is-pulled-right"
+						onClick={stepForward}
+					>
+						{step === 3 ? 'Done' : 'Next'}
+					</button>
+				</div>
+			</div>
+			<FloatingArrow
+				ref={arrowRef}
+				context={context}
+				fill="#eff5fb" // bulma light info notification background
+			/>
+		</div>
+	) : null;
+}
+
 export default function Drinktracker() {
+	const [anchor, setAnchor] = useState(null);
 	const { drinks, addDrink, removeDrink, clearDrinks } = useDrinks();
 	const [now, setNow] = useState(new Date());
 	const [menu, setMenu] = useState(false);
@@ -182,11 +274,7 @@ export default function Drinktracker() {
 			}}
 		>
 			<Nav menu={menu} toggleMenu={toggleMenu} colourClass={colourClass} />
-			<CurrentDrinks
-				currentDrinks={currentDrinksValue}
-				now={now}
-				colourClass={colourClass}
-			/>
+			<CurrentDrinks currentDrinks={currentDrinksValue} setAnchor={setAnchor} />
 			<section className="section">
 				<div className="container">
 					<NewDrink addDrink={addDrink} colourClass={colourClass} />
@@ -236,6 +324,7 @@ export default function Drinktracker() {
 				</div>
 			</footer>
 			<InstallNotification deferredInstallPrompt={deferredInstallPrompt} />
+			<CurrentDrinksExplainer anchor={anchor} drinks={drinks} />
 		</div>
 	);
 }
