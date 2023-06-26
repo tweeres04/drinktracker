@@ -213,13 +213,13 @@ function CurrentDrinksExplainer({ anchor, drinks }) {
 						a sense of what number works for you.
 					</p>
 				) : null}
-				<div>
-					<button
-						className="button is-info is-pulled-right"
-						onClick={stepForward}
-					>
-						{step === 3 ? 'Done' : 'Next'}
-					</button>
+				<div className="columns is-mobile">
+					<div className="column is-flex is-align-items-center">{step}/3</div>
+					<div className="column is-narrow">
+						<button className="button is-info" onClick={stepForward}>
+							{step === 3 ? 'Done' : 'Next'}
+						</button>
+					</div>
 				</div>
 			</div>
 			<FloatingArrow
