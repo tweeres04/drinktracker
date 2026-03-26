@@ -75,7 +75,12 @@ export function useSessions() {
 	useEffect(() => {
 		async function loadSessions() {
 			const sessions = (await get('sessions')) || [];
-			setSessions(sessions);
+			setSessions(
+				sessions.map((s) => ({
+					...s,
+					drinks: s.drinks.map(drinkFactory),
+				}))
+			);
 		}
 		loadSessions();
 	}, []);
