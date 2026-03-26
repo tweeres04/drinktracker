@@ -70,13 +70,21 @@ export default function SessionSparkline({
 	const yScale = (val) =>
 		chartHeight - padding - (val / maxVal) * (chartHeight - padding * 2);
 
-	const linePath = points
-		.map((p, i) => `${i === 0 ? 'M' : 'L'}${xScale(i)},${yScale(p.val)}`)
-		.join(' ');
+	// Build smooth cubic bezier path
+	const coords = points.map((p, i) => ({ x: xScale(i), y: yScale(p.val) }));
+	let linePath = `M${coords[0].x},${coords[0].y}`;
+	for (let i = 1; i < coords.length; i++) {
+		const prev = coords[i - 1];
+		const curr = coords[i];
+		const cpx = (prev.x + curr.x) / 2;
+		linePath += ` C${cpx},${prev.y} ${cpx},${curr.y} ${curr.x},${curr.y}`;
+	}
 
+	const last = coords[coords.length - 1];
+	const first = coords[0];
 	const areaPath =
 		linePath +
-		` L${xScale(steps)},${yScale(0)} L${xScale(0)},${yScale(0)} Z`;
+		` L${last.x},${yScale(0)} L${first.x},${yScale(0)} Z`;
 
 	// Hour marks along the bottom, snapped to clock hours
 	const hourMarks = [];
