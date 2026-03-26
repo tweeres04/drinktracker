@@ -13,7 +13,8 @@ import addMinutes from 'date-fns/addMinutes';
 
 import currentDrinks from '../currentDrinks';
 import Nav from './Nav';
-import { useSessions, SessionSparkline } from './Drinktracker';
+import { useSessions } from './Drinktracker';
+import SessionSparkline from './SessionSparkline';
 
 function peakDrinksInSession(drinks) {
 	if (!drinks.length) return 0;
