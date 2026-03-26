@@ -37,12 +37,31 @@ export default function SessionSparkline({
 	const totalMinutes = (now - start) / 60000;
 	if (totalMinutes <= 0) return null;
 
-	// Sample every 10 minutes
-	const steps = Math.max(Math.ceil(totalMinutes / 10), 2);
+	// Build sample times: regular intervals + drink times for accurate peaks
+	const steps = Math.max(Math.min(Math.ceil(totalMinutes / 10), 30), 2);
+	const sampleTimes = new Set();
+	for (let i = 0; i <= steps; i++) {
+		sampleTimes.add(addMinutes(start, (totalMinutes * i) / steps).getTime());
+	}
+	const drinkTimes = drinks
+		.map((d) => d.time.getTime())
+		.filter((t) => t >= start.getTime() && t <= now.getTime());
+	for (const dt of drinkTimes) {
+		sampleTimes.add(dt);
+	}
+	// Remove interval samples that are within 10 minutes of a drink time for smooth curves
+	const tenMin = 10 * 60000;
+	const sortedTimes = [...sampleTimes]
+		.filter((ms) => {
+			if (drinkTimes.includes(ms)) return true;
+			return !drinkTimes.some((dt) => Math.abs(ms - dt) < tenMin);
+		})
+		.sort((a, b) => a - b);
+
 	const points = [];
 	let maxVal = 0;
-	for (let i = 0; i <= steps; i++) {
-		const t = addMinutes(start, (totalMinutes * i) / steps);
+	for (const ms of sortedTimes) {
+		const t = new Date(ms);
 		const drinksAtTime = drinks.filter((d) => d.time <= t);
 		const val = currentDrinks({ drinks: drinksAtTime, now: t });
 		if (val > maxVal) maxVal = val;
@@ -66,11 +85,15 @@ export default function SessionSparkline({
 	const padding = 4;
 	const dataWidth = fullWidth ? width : width * (2 / 3);
 
-	const xScale = (i) => padding + (i / steps) * (dataWidth - padding * 2);
+	const startMs = start.getTime();
+	const endMs = now.getTime();
+	const xScale = (t) =>
+		padding +
+		((t.getTime() - startMs) / (endMs - startMs)) * (dataWidth - padding * 2);
 	const yScale = (val) =>
 		chartHeight - padding - (val / maxVal) * (chartHeight - padding * 2);
 
-	const coords = points.map((p, i) => ({ x: xScale(i), y: yScale(p.val) }));
+	const coords = points.map((p) => ({ x: xScale(p.t), y: yScale(p.val) }));
 	let linePath = `M${coords[0].x},${coords[0].y}`;
 	for (let i = 0; i < coords.length - 1; i++) {
 		const p1 = coords[i];
@@ -81,8 +104,7 @@ export default function SessionSparkline({
 	const last = coords[coords.length - 1];
 	const first = coords[0];
 	const areaPath =
-		linePath +
-		` L${last.x},${yScale(0)} L${first.x},${yScale(0)} Z`;
+		linePath + ` L${last.x},${yScale(0)} L${first.x},${yScale(0)} Z`;
 
 	// Hour marks along the bottom, snapped to clock hours
 	const hourMarks = [];
@@ -94,14 +116,12 @@ export default function SessionSparkline({
 		t <= now;
 		t = new Date(t.getTime() + 3600000)
 	) {
-		const minuteOffset = (t - start) / 60000;
-		const stepIndex = (minuteOffset / totalMinutes) * steps;
-		const x = xScale(stepIndex);
+		const x = xScale(t);
 		hourMarks.push({ x, label: dateFormat(t, 'h a') });
 	}
 
 	const lastPoint = points[points.length - 1];
-	const dotX = xScale(steps);
+	const dotX = xScale(lastPoint.t);
 	const dotY = yScale(lastPoint.val);
 
 	function handleTap(e) {
@@ -114,8 +134,8 @@ export default function SessionSparkline({
 		// Find nearest point
 		let nearest = 0;
 		let nearestDist = Infinity;
-		for (let i = 0; i <= steps; i++) {
-			const dist = Math.abs(xScale(i) - svgX);
+		for (let i = 0; i < coords.length; i++) {
+			const dist = Math.abs(coords[i].x - svgX);
 			if (dist < nearestDist) {
 				nearestDist = dist;
 				nearest = i;
@@ -130,7 +150,7 @@ export default function SessionSparkline({
 	}
 
 	const sel = selected !== null ? points[selected] : null;
-	const selX = selected !== null ? xScale(selected) : 0;
+	const selX = selected !== null ? coords[selected].x : 0;
 	const selY = selected !== null ? yScale(sel.val) : 0;
 	const tooltipWidth = 80;
 	const tooltipHeight = 36;
@@ -156,12 +176,7 @@ export default function SessionSparkline({
 					</linearGradient>
 				</defs>
 				<path d={areaPath} fill={`url(#${gradientId})`} />
-				<path
-					d={linePath}
-					fill="none"
-					stroke={lineColor}
-					strokeWidth="2"
-				/>
+				<path d={linePath} fill="none" stroke={lineColor} strokeWidth="2" />
 				{hourMarks.map((mark) => (
 					<g key={mark.label}>
 						<line
