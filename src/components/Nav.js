@@ -22,6 +22,9 @@ export default function Nav({ menu, toggleMenu, colourClass }) {
 			</div>
 			<div className={classnames('navbar-menu', { 'is-active': menu })}>
 				<div className="navbar-start">
+					<Link to="/history" className="navbar-item">
+						History
+					</Link>
 					<Link to="/help" className="navbar-item">
 						Help
 					</Link>

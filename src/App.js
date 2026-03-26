@@ -1,5 +1,5 @@
 import React, { Component, Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Drinktracker from './components/Drinktracker';
 
@@ -7,10 +7,11 @@ import './App.scss';
 
 const Help = lazy(() => import('./components/Help'));
 const Terms = lazy(() => import('./components/Terms'));
+const History = lazy(() => import('./components/History'));
 
 export function drinkFactory({ time, value }) {
 	return {
-		time,
+		time: new Date(time),
 		value,
 	};
 }
@@ -50,7 +51,10 @@ export default class App extends Component {
 								/>
 							)}
 						/>
-						<Route path="/" component={Drinktracker} />
+						<Switch>
+							<Route path="/history" component={History} />
+							<Route path="/" component={Drinktracker} />
+						</Switch>
 					</div>
 				</Router>
 			</Suspense>

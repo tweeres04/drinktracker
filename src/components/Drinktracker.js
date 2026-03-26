@@ -7,7 +7,7 @@ import { get, set } from 'idb-keyval';
 import { useFloating, FloatingArrow, arrow } from '@floating-ui/react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import amplitude from 'amplitude-js';
 
@@ -46,7 +46,7 @@ function useDrinks() {
 	}
 	function removeDrink(drink) {
 		setDrinks((prevState) => {
-			const drinks = prevState.filter((d) => d != drink);
+			const drinks = prevState.filter((d) => d !== drink);
 			set('drinks', drinks);
 			return drinks;
 		});
@@ -56,13 +56,9 @@ function useDrinks() {
 		});
 	}
 
-	async function clearDrinks() {
+	function clearDrinks() {
 		set('drinks', []);
 		setDrinks([]);
-		amplitude.getInstance().logEvent('drinks_cleared');
-		window.gtag('event', 'Drinks cleared', {
-			event_category: 'Drinks',
-		});
 	}
 
 	return {
@@ -71,6 +67,37 @@ function useDrinks() {
 		removeDrink,
 		clearDrinks,
 	};
+}
+
+export function useSessions() {
+	const [sessions, setSessions] = useState([]);
+
+	useEffect(() => {
+		async function loadSessions() {
+			const sessions = (await get('sessions')) || [];
+			setSessions(sessions);
+		}
+		loadSessions();
+	}, []);
+
+	function saveSession(drinks) {
+		if (!drinks || drinks.length === 0) return;
+		const session = {
+			id: Date.now().toString(),
+			drinks: drinks.map(drinkFactory),
+		};
+		setSessions((prev) => {
+			const updated = [...prev, session];
+			set('sessions', updated);
+			return updated;
+		});
+		amplitude.getInstance().logEvent('new_session');
+		window.gtag('event', 'New session', {
+			event_category: 'Sessions',
+		});
+	}
+
+	return { sessions, saveSession };
 }
 
 function InstallNotification({ deferredInstallPrompt }) {
@@ -234,6 +261,13 @@ function CurrentDrinksExplainer({ anchor, drinks }) {
 export default function Drinktracker() {
 	const [anchor, setAnchor] = useState(null);
 	const { drinks, addDrink, removeDrink, clearDrinks } = useDrinks();
+	const { saveSession } = useSessions();
+
+	function newSession() {
+		saveSession(drinks);
+		clearDrinks();
+	}
+
 	const [now, setNow] = useState(new Date());
 	const [menu, setMenu] = useState(false);
 	const timeHandleRef = useRef(null);
@@ -283,16 +317,18 @@ export default function Drinktracker() {
 						removeDrink={removeDrink}
 						currentDrinks={currentDrinksValue}
 					/>
-					<button
-						className="button is-danger"
-						style={{ marginTop: '2rem' }}
-						onClick={clearDrinks}
-					>
-						<span className="icon">
-							<FontAwesomeIcon icon={faMinusCircle} />
+					{drinks && drinks.length > 0 && (
+						<button
+							className="button"
+							style={{ marginTop: '2rem' }}
+							onClick={newSession}
+						>
+							<span className="icon">
+							<FontAwesomeIcon icon={faPlus} />
 						</span>
-						<span>Clear drinks</span>
-					</button>
+						<span>New session</span>
+						</button>
+					)}
 				</div>
 			</section>
 			<footer className="footer">
