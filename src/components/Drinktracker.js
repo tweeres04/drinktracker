@@ -266,9 +266,10 @@ function CurrentDrinksExplainer({ anchor, drinks }) {
 	) : null;
 }
 
-function SessionSparkline({ drinks, now }) {
+export function SessionSparkline({ drinks, now, variant = 'light', fullWidth = false }) {
 	const [selected, setSelected] = useState(null);
 	const svgRef = useRef(null);
+	const gradientId = useRef(`sparkGrad-${Math.random().toString(36).slice(2)}`).current;
 
 	useEffect(() => {
 		if (selected === null) return;
@@ -303,12 +304,18 @@ function SessionSparkline({ drinks, now }) {
 
 	if (maxVal === 0) return null;
 
+	const isLight = variant === 'light';
+	const lineColor = isLight ? 'rgba(255, 255, 255, 0.5)' : 'hsl(171, 100%, 41%)';
+	const dotColor = isLight ? 'white' : 'hsl(171, 100%, 41%)';
+	const textColor = isLight ? 'white' : 'hsl(0, 0%, 48%)';
+	const gradientStart = isLight ? 'white' : 'hsl(171, 100%, 41%)';
+
 	const width = 300;
 	const chartHeight = 80;
 	const labelHeight = 14;
 	const height = chartHeight + labelHeight;
 	const padding = 4;
-	const dataWidth = width * (2 / 3);
+	const dataWidth = fullWidth ? width : width * (2 / 3);
 
 	const xScale = (i) => padding + (i / steps) * (dataWidth - padding * 2);
 	const yScale = (val) =>
@@ -384,16 +391,16 @@ function SessionSparkline({ drinks, now }) {
 				onClick={handleTap}
 			>
 				<defs>
-					<linearGradient id="sparklineGradient" x1="0" x2="0" y1="0" y2="1">
-						<stop offset="0%" stopColor="white" stopOpacity="0.15" />
-						<stop offset="100%" stopColor="white" stopOpacity="0" />
+					<linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
+						<stop offset="0%" stopColor={gradientStart} stopOpacity="0.15" />
+						<stop offset="100%" stopColor={gradientStart} stopOpacity="0" />
 					</linearGradient>
 				</defs>
-				<path d={areaPath} fill="url(#sparklineGradient)" />
+				<path d={areaPath} fill={`url(#${gradientId})`} />
 				<path
 					d={linePath}
 					fill="none"
-					stroke="rgba(255, 255, 255, 0.5)"
+					stroke={lineColor}
 					strokeWidth="2"
 				/>
 				{hourMarks.map((mark) => (
@@ -403,7 +410,7 @@ function SessionSparkline({ drinks, now }) {
 							y1={yScale(0)}
 							x2={mark.x}
 							y2={yScale(0) + 3}
-							stroke="white"
+							stroke={textColor}
 							strokeWidth="1"
 							opacity="0.3"
 						/>
@@ -411,7 +418,7 @@ function SessionSparkline({ drinks, now }) {
 							x={mark.x}
 							y={yScale(0) + labelHeight}
 							textAnchor="middle"
-							fill="white"
+							fill={textColor}
 							fontSize="8"
 							opacity="0.5"
 						>
@@ -419,8 +426,8 @@ function SessionSparkline({ drinks, now }) {
 						</text>
 					</g>
 				))}
-				<circle cx={dotX} cy={dotY} r="4" fill="white" />
-				<circle cx={dotX} cy={dotY} r="8" fill="white" opacity="0.2" />
+				<circle cx={dotX} cy={dotY} r="4" fill={dotColor} />
+				<circle cx={dotX} cy={dotY} r="8" fill={dotColor} opacity="0.2" />
 				{sel && (
 					<>
 						<line
@@ -428,11 +435,11 @@ function SessionSparkline({ drinks, now }) {
 							y1={selY}
 							x2={selX}
 							y2={yScale(0)}
-							stroke="white"
+							stroke={dotColor}
 							strokeWidth="1"
 							opacity="0.3"
 						/>
-						<circle cx={selX} cy={selY} r="4" fill="white" />
+						<circle cx={selX} cy={selY} r="4" fill={dotColor} />
 						<rect
 							x={tooltipX}
 							y={tooltipY}

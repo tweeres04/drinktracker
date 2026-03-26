@@ -9,9 +9,11 @@ import startOfWeek from 'date-fns/startOfWeek';
 import subWeeks from 'date-fns/subWeeks';
 import isAfter from 'date-fns/isAfter';
 
+import addMinutes from 'date-fns/addMinutes';
+
 import currentDrinks from '../currentDrinks';
 import Nav from './Nav';
-import { useSessions } from './Drinktracker';
+import { useSessions, SessionSparkline } from './Drinktracker';
 
 function peakDrinksInSession(drinks) {
 	if (!drinks.length) return 0;
@@ -29,6 +31,12 @@ function peakDrinksInSession(drinks) {
 		if (value > peak) peak = value;
 	}
 	return peak;
+}
+
+function sessionSoberTime(drinks) {
+	const lastDrinkTime = maxDate(drinks.map((d) => d.time));
+	const drinksAtEnd = currentDrinks({ drinks, now: lastDrinkTime });
+	return addMinutes(lastDrinkTime, drinksAtEnd * 60);
 }
 
 function sessionDuration(drinks) {
@@ -222,7 +230,17 @@ export default function Sessions() {
 												{drinkCount === 1 ? '' : 's'}
 											</div>
 										</div>
-										{expanded && <SessionDetail session={session} />}
+										{expanded && (
+											<>
+												<SessionSparkline
+													drinks={session.drinks}
+													now={sessionSoberTime(session.drinks)}
+													variant="dark"
+													fullWidth
+												/>
+												<SessionDetail session={session} />
+											</>
+										)}
 									</div>
 								);
 							})}
