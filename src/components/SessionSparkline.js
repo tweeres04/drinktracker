@@ -37,8 +37,8 @@ export default function SessionSparkline({
 	const totalMinutes = (now - start) / 60000;
 	if (totalMinutes <= 0) return null;
 
-	// Sample every 2 minutes
-	const steps = Math.max(Math.ceil(totalMinutes / 2), 2);
+	// Sample every 10 minutes
+	const steps = Math.max(Math.ceil(totalMinutes / 10), 2);
 	const points = [];
 	let maxVal = 0;
 	for (let i = 0; i <= steps; i++) {
@@ -70,16 +70,14 @@ export default function SessionSparkline({
 	const yScale = (val) =>
 		chartHeight - padding - (val / maxVal) * (chartHeight - padding * 2);
 
-	// Build smooth cubic bezier path
 	const coords = points.map((p, i) => ({ x: xScale(i), y: yScale(p.val) }));
 	let linePath = `M${coords[0].x},${coords[0].y}`;
-	for (let i = 1; i < coords.length; i++) {
-		const prev = coords[i - 1];
-		const curr = coords[i];
-		const cpx = (prev.x + curr.x) / 2;
-		linePath += ` C${cpx},${prev.y} ${cpx},${curr.y} ${curr.x},${curr.y}`;
+	for (let i = 0; i < coords.length - 1; i++) {
+		const p1 = coords[i];
+		const p2 = coords[i + 1];
+		const dx = (p2.x - p1.x) / 3;
+		linePath += ` C${p1.x + dx},${p1.y} ${p2.x - dx},${p2.y} ${p2.x},${p2.y}`;
 	}
-
 	const last = coords[coords.length - 1];
 	const first = coords[0];
 	const areaPath =
