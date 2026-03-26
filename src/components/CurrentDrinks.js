@@ -18,7 +18,7 @@ function SoberTime({ currentDrinks }) {
 	);
 }
 
-export default function CurrentDrinks({ currentDrinks, setAnchor }) {
+export default function CurrentDrinks({ currentDrinks, setAnchor, children }) {
 	const danger = currentDrinks >= 6;
 	const warning = currentDrinks >= 4 && currentDrinks < 6;
 	const messageClasses = classnames('message', {
@@ -46,6 +46,7 @@ export default function CurrentDrinks({ currentDrinks, setAnchor }) {
 						</div>
 					)}
 					<SoberTime currentDrinks={currentDrinks} />
+					{children}
 				</div>
 			</div>
 		</section>
