@@ -115,11 +115,11 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 	const areaPath =
 		linePath + ` L${last.x},${yScale(0)} L${first.x},${yScale(0)} Z`;
 
-	// Hour marks along the bottom, snapped to clock hours
-	const hourMarks = [];
+	// Hour marks along the bottom: start time + clock hours
+	const hourMarks = [{ x: xScale(start), label: dateFormat(start, 'h:mm a') }];
 	const firstHour = new Date(start);
 	firstHour.setMinutes(0, 0, 0);
-	if (firstHour < start) firstHour.setHours(firstHour.getHours() + 1);
+	if (firstHour <= start) firstHour.setHours(firstHour.getHours() + 1);
 	for (
 		let t = new Date(firstHour);
 		t <= now;
@@ -194,7 +194,7 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 				</defs>
 				<path d={areaPath} fill={`url(#${gradientId})`} />
 				<path d={linePath} fill="none" stroke={lineColor} strokeWidth="2" />
-				{hourMarks.map((mark) => (
+				{hourMarks.map((mark, i) => (
 					<g key={`hour-${mark.label}`}>
 						<line
 							x1={mark.x}
@@ -208,7 +208,7 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 						<text
 							x={mark.x}
 							y={yScale(0) + labelHeight}
-							textAnchor="middle"
+							textAnchor={i === 0 ? 'start' : 'middle'}
 							fill={textColor}
 							fontSize="8"
 							opacity="0.5"
