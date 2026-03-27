@@ -225,7 +225,6 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 						textAnchor="middle"
 						fill={textColor}
 						fontSize="8"
-						opacity="0.5"
 					>
 						{mark.label}
 					</text>
