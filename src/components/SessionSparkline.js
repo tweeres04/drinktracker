@@ -41,7 +41,9 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 	const times = drinks.map((d) => d.time);
 	const start = minDate(times);
 	const totalMinutes = (now - start) / 60000;
-	if (totalMinutes <= 0) return null;
+	// Don't show until 10 min in — the 10-min sample clearing zone
+	// around drink times leaves too few points for a meaningful curve
+	if (totalMinutes < 10) return null;
 
 	// Build sample times: regular intervals + drink times for accurate peaks
 	const steps = Math.max(Math.min(Math.ceil(totalMinutes / 10), 30), 2);
