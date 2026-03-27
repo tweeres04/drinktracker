@@ -17,17 +17,11 @@ import SessionSparkline from './SessionSparkline';
 
 function peakDrinksInSession(drinks) {
 	if (!drinks.length) return 0;
-	const times = drinks.map((d) => d.time);
-	const latest = maxDate(times);
 
-	// Check peak at each drink time and a few points after
 	let peak = 0;
-	const checkPoints = times.slice();
-	// Also check at the latest drink time + a minute (peak is usually right after last drink)
-	checkPoints.push(new Date(latest.getTime() + 60000));
-
-	for (const t of checkPoints) {
-		const value = currentDrinks({ drinks, now: t });
+	for (const t of drinks.map((d) => d.time)) {
+		const drinksAtTime = drinks.filter((d) => d.time <= t);
+		const value = currentDrinks({ drinks: drinksAtTime, now: t });
 		if (value > peak) peak = value;
 	}
 	return peak;
