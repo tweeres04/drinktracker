@@ -9,7 +9,6 @@ import startOfWeek from 'date-fns/startOfWeek';
 import subWeeks from 'date-fns/subWeeks';
 import isAfter from 'date-fns/isAfter';
 
-import addMinutes from 'date-fns/addMinutes';
 
 import currentDrinks from '../currentDrinks';
 import Nav from './Nav';
@@ -34,11 +33,6 @@ function peakDrinksInSession(drinks) {
 	return peak;
 }
 
-function sessionSoberTime(drinks) {
-	const lastDrinkTime = maxDate(drinks.map((d) => d.time));
-	const drinksAtEnd = currentDrinks({ drinks, now: lastDrinkTime });
-	return addMinutes(lastDrinkTime, drinksAtEnd * 60);
-}
 
 function sessionDuration(drinks) {
 	const times = drinks.map((d) => d.time);
@@ -235,9 +229,7 @@ export default function Sessions() {
 											<>
 												<SessionSparkline
 													drinks={session.drinks}
-													now={sessionSoberTime(session.drinks)}
 													variant="dark"
-													fullWidth
 												/>
 												<SessionDetail session={session} />
 											</>

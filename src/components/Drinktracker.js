@@ -315,7 +315,7 @@ export default function Drinktracker() {
 		>
 			<Nav menu={menu} toggleMenu={toggleMenu} colourClass={colourClass} />
 			<CurrentDrinks currentDrinks={currentDrinksValue} setAnchor={setAnchor}>
-				<SessionSparkline drinks={drinks} now={now} />
+				<SessionSparkline drinks={drinks} />
 			</CurrentDrinks>
 			<section className="section">
 				<div className="container">

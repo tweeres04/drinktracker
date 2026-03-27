@@ -1,16 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import minDate from 'date-fns/min';
+import maxDate from 'date-fns/max';
 import addMinutes from 'date-fns/addMinutes';
 import dateFormat from 'date-fns/format';
 
 import currentDrinks from '../currentDrinks';
 
-export default function SessionSparkline({
-	drinks,
-	now,
-	variant = 'light',
-	fullWidth = false,
-}) {
+export default function SessionSparkline({ drinks, variant = 'light' }) {
 	const [selected, setSelected] = useState(null);
 	const svgRef = useRef(null);
 	const gradientId = useRef(
@@ -31,6 +27,16 @@ export default function SessionSparkline({
 	}, [selected]);
 
 	if (!drinks || drinks.length === 0) return null;
+
+	// When drinks have fully decayed, extend the sparkline to the sober
+	// time and use full width so the curve ends at 0.
+	let now = new Date();
+	const sober = currentDrinks({ drinks, now }) === 0;
+	if (sober) {
+		const lastDrinkTime = maxDate(drinks.map((d) => d.time));
+		const drinksAtEnd = currentDrinks({ drinks, now: lastDrinkTime });
+		now = addMinutes(lastDrinkTime, drinksAtEnd * 60);
+	}
 
 	const times = drinks.map((d) => d.time);
 	const start = minDate(times);
@@ -83,7 +89,7 @@ export default function SessionSparkline({
 	const labelHeight = 14;
 	const height = chartHeight + labelHeight;
 	const padding = 4;
-	const dataWidth = fullWidth ? width : width * (2 / 3);
+	const dataWidth = sober ? width : width * (2 / 3);
 
 	const startMs = start.getTime();
 	const endMs = now.getTime();
