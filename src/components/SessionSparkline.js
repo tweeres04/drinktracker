@@ -98,8 +98,9 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 	const xScale = (t) =>
 		padding +
 		((t.getTime() - startMs) / (endMs - startMs)) * (dataWidth - padding * 2);
+	const topPadding = padding + 12; // extra room for drink number labels
 	const yScale = (val) =>
-		chartHeight - padding - (val / maxVal) * (chartHeight - padding * 2);
+		chartHeight - padding - (val / maxVal) * (chartHeight - topPadding - padding);
 
 	const coords = points.map((p) => ({ x: xScale(p.t), y: yScale(p.val) }));
 	let linePath = `M${coords[0].x},${coords[0].y}`;
@@ -128,11 +129,13 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 		hourMarks.push({ x, label: dateFormat(t, 'h a') });
 	}
 
-	// Drink marks along the bottom, numbered sequentially
-	const drinkMarks = drinks
-		.slice()
-		.sort((a, b) => a.time - b.time)
-		.map((d, i) => ({ x: xScale(d.time), label: String(i + 1) }));
+	// Drink labels positioned above their peak points
+	const sortedDrinks = drinks.slice().sort((a, b) => a.time - b.time);
+	const drinkLabels = sortedDrinks.map((d, i) => {
+		const drinksAtTime = drinks.filter((dr) => dr.time <= d.time);
+		const val = currentDrinks({ drinks: drinksAtTime, now: d.time });
+		return { x: xScale(d.time), y: yScale(val), label: String(i + 1) };
+	});
 
 	const lastPoint = points[points.length - 1];
 	const dotX = xScale(lastPoint.t);
@@ -214,28 +217,18 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 						</text>
 					</g>
 				))}
-				{drinkMarks.map((mark) => (
-					<g key={`drink-${mark.label}`}>
-						<line
-							x1={mark.x}
-							y1={yScale(0)}
-							x2={mark.x}
-							y2={yScale(0) + 3}
-							stroke={textColor}
-							strokeWidth="1"
-							opacity="0.3"
-						/>
-						<text
-							x={mark.x}
-							y={yScale(0) + labelHeight}
-							textAnchor="middle"
-							fill={textColor}
-							fontSize="8"
-							opacity="0.5"
-						>
-							{mark.label}
-						</text>
-					</g>
+				{drinkLabels.map((mark) => (
+					<text
+						key={`drink-${mark.label}`}
+						x={mark.x}
+						y={mark.y - 8}
+						textAnchor="middle"
+						fill={textColor}
+						fontSize="8"
+						opacity="0.5"
+					>
+						{mark.label}
+					</text>
 				))}
 				<circle cx={dotX} cy={dotY} r="4" fill={dotColor} />
 				<circle cx={dotX} cy={dotY} r="8" fill={dotColor} opacity="0.2" />
