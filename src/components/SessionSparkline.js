@@ -128,6 +128,12 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 		hourMarks.push({ x, label: dateFormat(t, 'h a') });
 	}
 
+	// Drink marks along the bottom, numbered sequentially
+	const drinkMarks = drinks
+		.slice()
+		.sort((a, b) => a.time - b.time)
+		.map((d, i) => ({ x: xScale(d.time), label: String(i + 1) }));
+
 	const lastPoint = points[points.length - 1];
 	const dotX = xScale(lastPoint.t);
 	const dotY = yScale(lastPoint.val);
@@ -186,7 +192,30 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 				<path d={areaPath} fill={`url(#${gradientId})`} />
 				<path d={linePath} fill="none" stroke={lineColor} strokeWidth="2" />
 				{hourMarks.map((mark) => (
-					<g key={mark.label}>
+					<g key={`hour-${mark.label}`}>
+						<line
+							x1={mark.x}
+							y1={yScale(0)}
+							x2={mark.x}
+							y2={yScale(0) + 3}
+							stroke={textColor}
+							strokeWidth="1"
+							opacity="0.3"
+						/>
+						<text
+							x={mark.x}
+							y={yScale(0) + labelHeight}
+							textAnchor="middle"
+							fill={textColor}
+							fontSize="8"
+							opacity="0.5"
+						>
+							{mark.label}
+						</text>
+					</g>
+				))}
+				{drinkMarks.map((mark) => (
+					<g key={`drink-${mark.label}`}>
 						<line
 							x1={mark.x}
 							y1={yScale(0)}
