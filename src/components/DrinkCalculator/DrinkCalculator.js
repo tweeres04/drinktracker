@@ -1,6 +1,6 @@
 import React, { Component, lazy } from 'react';
 
-import amplitude from 'amplitude-js';
+import { track } from '../../analytics';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons';
@@ -30,9 +30,7 @@ export default class DrinkCalculator extends Component {
 	}
 	toggleModal = () => {
 		this.setState(({ show }) => {
-			amplitude
-				.getInstance()
-				.logEvent(`drink_calculator_${show ? 'opened' : 'closed'}`);
+			track(`drink_calculator_${show ? 'opened' : 'closed'}`);
 			window.gtag('event', `Drink calculator ${show ? 'opened' : 'closed'}`, {
 				event_category: 'Drink calculator',
 			});

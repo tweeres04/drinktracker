@@ -4,7 +4,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import installableApp from './installableApp';
 import * as FS from '@fullstory/browser';
-import amplitude from 'amplitude-js';
+import { initAnalytics, track, identify, registerSuperProperties } from './analytics';
 
 installableApp();
 
@@ -25,19 +25,19 @@ function getPWADisplayMode() {
 	return 'browser';
 }
 
-function amplitudeSetup() {
-	amplitude.getInstance().init(process.env.REACT_APP_AMPLITUDE_API_KEY);
+function analyticsSetup() {
+	initAnalytics();
 
 	window.addEventListener('appinstalled', () => {
-		amplitude.getInstance().logEvent('app_installed');
+		track('app_installed');
 	});
 
 	const displayMode = getPWADisplayMode();
-	const identify = new amplitude.Identify().set('display_mode', displayMode);
-	amplitude.getInstance().identify(identify);
+	identify('display_mode', displayMode);
+	registerSuperProperties({ display_mode: displayMode });
 }
 
-amplitudeSetup();
+analyticsSetup();
 
 window.addEventListener(
 	'error',

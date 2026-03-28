@@ -9,7 +9,7 @@ import { useFloating, FloatingArrow, arrow } from '@floating-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import amplitude from 'amplitude-js';
+import { track } from '../analytics';
 
 import currentDrinks from '../currentDrinks';
 
@@ -40,7 +40,7 @@ function useDrinks() {
 			set('drinks', drinks);
 			return drinks;
 		});
-		amplitude.getInstance().logEvent('drink_added', drink);
+		track('drink_added', drink);
 		window.gtag('event', 'Drink added', {
 			event_category: 'Drinks',
 		});
@@ -51,7 +51,7 @@ function useDrinks() {
 			set('drinks', drinks);
 			return drinks;
 		});
-		amplitude.getInstance().logEvent('drink_removed');
+		track('drink_removed');
 		window.gtag('event', 'Drink removed', {
 			event_category: 'Drinks',
 		});
@@ -97,7 +97,7 @@ export function useSessions() {
 			set('sessions', updated);
 			return updated;
 		});
-		amplitude.getInstance().logEvent('new_session');
+		track('new_session');
 		window.gtag('event', 'New session', {
 			event_category: 'Sessions',
 		});
@@ -148,14 +148,12 @@ function InstallNotification({ deferredInstallPrompt }) {
 							deferredInstallPrompt.prompt();
 							const choiceResult = await deferredInstallPrompt.userChoice;
 							if (choiceResult.outcome === 'accepted') {
-								amplitude.getInstance().logEvent('accepted_add_to_home_screen');
+								track('accepted_add_to_home_screen');
 								window.gtag('event', 'Accepted add to home screen', {
 									event_category: 'App install',
 								});
 							} else {
-								amplitude
-									.getInstance()
-									.logEvent('dismissed_add_to_home_screen');
+								track('dismissed_add_to_home_screen');
 								window.gtag('event', 'Dismissed add to home screen', {
 									event_category: 'App install',
 								});

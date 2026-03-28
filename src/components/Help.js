@@ -1,8 +1,8 @@
 import React from 'react';
-import amplitude from 'amplitude-js';
+import { track } from '../analytics';
 
 export default function Help({ show, toggle }) {
-	amplitude.getInstance().logEvent('viewed_help');
+	track('viewed_help');
 	window.gtag('event', 'Viewed help');
 	return (
 		show && (

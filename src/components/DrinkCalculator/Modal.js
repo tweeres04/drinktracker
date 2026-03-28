@@ -4,7 +4,7 @@ import _uniqWith from 'lodash/uniqWith';
 import _isEqual from 'lodash/isEqual';
 import { get, set } from 'idb-keyval';
 
-import amplitude from 'amplitude-js';
+import { track } from '../../analytics';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
@@ -187,7 +187,7 @@ export default class Modal extends Component {
 		setDrinks(getDrinks({ percent, volume, unit }));
 		close();
 		storeState({ percent, volume, unit });
-		amplitude.getInstance().logEvent('drink_calculator_used', {
+		track('drink_calculator_used', {
 			percent,
 			volume,
 			unit,
