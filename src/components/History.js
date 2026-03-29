@@ -9,7 +9,6 @@ import startOfWeek from 'date-fns/startOfWeek';
 import subWeeks from 'date-fns/subWeeks';
 import isAfter from 'date-fns/isAfter';
 
-
 import currentDrinks from '../currentDrinks';
 import Nav from './Nav';
 import { useSessions } from './Drinktracker';
@@ -213,6 +212,14 @@ export default function Sessions() {
 												<strong>
 													{dateFormat(sessionDate, 'EEE, MMM d, yyyy')}
 												</strong>
+												{session.current && (
+													<span
+														className="tag is-primary is-light"
+														style={{ marginLeft: '0.5rem' }}
+													>
+														In progress
+													</span>
+												)}
 											</div>
 											<div className="column is-narrow has-text-right">
 												{_round(drinkCount, 1)} drink

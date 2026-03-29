@@ -131,10 +131,15 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 
 	// Drink labels positioned above their peak points
 	const sortedDrinks = drinks.slice().sort((a, b) => a.time - b.time);
-	const drinkLabels = sortedDrinks.map((d, i) => {
+	let runningTotal = 0;
+	const drinkLabels = sortedDrinks.map((d) => {
+		runningTotal += d.value;
 		const drinksAtTime = drinks.filter((dr) => dr.time <= d.time);
 		const val = currentDrinks({ drinks: drinksAtTime, now: d.time });
-		return { x: xScale(d.time), y: yScale(val), label: String(i + 1) };
+		const label = Number.isInteger(runningTotal)
+			? String(runningTotal)
+			: runningTotal.toFixed(1);
+		return { x: xScale(d.time), y: yScale(val), label };
 	});
 
 	const lastPoint = points[points.length - 1];
@@ -211,18 +216,18 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 							textAnchor={i === 0 ? 'start' : 'middle'}
 							fill={textColor}
 							fontSize="8"
-							opacity="0.5"
+							opacity="1"
 						>
 							{mark.label}
 						</text>
 					</g>
 				))}
-				{drinkLabels.map((mark) => (
+				{drinkLabels.map((mark, i) => (
 					<text
 						key={`drink-${mark.label}`}
 						x={mark.x}
 						y={mark.y - 8}
-						textAnchor="middle"
+						textAnchor={i === 0 ? 'start' : 'middle'}
 						fill={textColor}
 						fontSize="8"
 					>

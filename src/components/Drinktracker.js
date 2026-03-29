@@ -71,20 +71,34 @@ function useDrinks() {
 }
 
 export function useSessions() {
-	const [sessions, setSessions] = useState([]);
+	const [savedSessions, setSavedSessions] = useState([]);
+	const [currentDrinks, setCurrentDrinks] = useState([]);
 
 	useEffect(() => {
-		async function loadSessions() {
-			const sessions = (await get('sessions')) || [];
-			setSessions(
-				sessions.map((s) => ({
+		async function load() {
+			const [savedRaw, drinksRaw] = await Promise.all([
+				get('sessions'),
+				get('drinks'),
+			]);
+			setSavedSessions(
+				(savedRaw || []).map((s) => ({
 					...s,
 					drinks: s.drinks.map(drinkFactory),
 				}))
 			);
+			setCurrentDrinks((drinksRaw || []).map(drinkFactory));
 		}
-		loadSessions();
+		load();
 	}, []);
+
+	const currentSession =
+		currentDrinks.length > 0
+			? { id: 'current', current: true, drinks: currentDrinks }
+			: null;
+
+	const sessions = currentSession
+		? [currentSession, ...savedSessions]
+		: savedSessions;
 
 	function saveSession(drinks) {
 		if (!drinks || drinks.length === 0) return;
@@ -92,11 +106,12 @@ export function useSessions() {
 			id: Date.now().toString(),
 			drinks: drinks.map(drinkFactory),
 		};
-		setSessions((prev) => {
+		setSavedSessions((prev) => {
 			const updated = [...prev, session];
 			set('sessions', updated);
 			return updated;
 		});
+		setCurrentDrinks([]);
 		track('new_session');
 		window.gtag('event', 'New session', {
 			event_category: 'Sessions',
