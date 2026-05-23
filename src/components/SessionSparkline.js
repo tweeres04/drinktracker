@@ -130,11 +130,19 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 	}
 
 	// Drop the first hour mark if it would visually crash into the start
-	// label. Time-based thresholds (e.g. 5 min) only work at one zoom level —
-	// in a long session 5 min of pixels is tiny, in a short one it's huge.
-	// Compare in pixels instead so it scales with session length.
+	// label. Estimate each label's rendered width from its length (fontSize 8)
+	// and compare actual edges — start label is left-anchored, hour label is
+	// center-anchored. xScale already scales x positions to session length,
+	// so this check works at any zoom.
+	const charWidth = 5;
+	const startLabelRight =
+		hourMarks[0].x + hourMarks[0].label.length * charWidth;
+	const firstHourLeft =
+		hourMarks.length >= 2
+			? hourMarks[1].x - (hourMarks[1].label.length * charWidth) / 2
+			: Infinity;
 	const visibleHourMarks =
-		hourMarks.length >= 2 && hourMarks[1].x - hourMarks[0].x < 30
+		firstHourLeft < startLabelRight + 2
 			? [hourMarks[0], ...hourMarks.slice(2)]
 			: hourMarks;
 
