@@ -129,6 +129,15 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 		hourMarks.push({ x, label: dateFormat(t, 'h a') });
 	}
 
+	// Drop the first hour mark if it would visually crash into the start
+	// label. Time-based thresholds (e.g. 5 min) only work at one zoom level —
+	// in a long session 5 min of pixels is tiny, in a short one it's huge.
+	// Compare in pixels instead so it scales with session length.
+	const visibleHourMarks =
+		hourMarks.length >= 2 && hourMarks[1].x - hourMarks[0].x < 30
+			? [hourMarks[0], ...hourMarks.slice(2)]
+			: hourMarks;
+
 	// Drink labels positioned above their peak points
 	const sortedDrinks = drinks.slice().sort((a, b) => a.time - b.time);
 	let runningTotal = 0;
@@ -199,7 +208,7 @@ export default function SessionSparkline({ drinks, variant = 'light' }) {
 				</defs>
 				<path d={areaPath} fill={`url(#${gradientId})`} />
 				<path d={linePath} fill="none" stroke={lineColor} strokeWidth="2" />
-				{hourMarks.map((mark, i) => (
+				{visibleHourMarks.map((mark, i) => (
 					<g key={`hour-${mark.label}`}>
 						<line
 							x1={mark.x}
