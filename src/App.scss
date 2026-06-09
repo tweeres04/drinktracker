@@ -2,3 +2,11 @@ $whiskey-brown: rgb(226, 135, 89);
 $family-sans-serif: 'Poppins', sans-serif;
 
 @import 'bulma/bulma.sass';
+
+input[type='date']::-webkit-calendar-picker-indicator,
+input[type='time']::-webkit-calendar-picker-indicator {
+	position: absolute;
+	right: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+}

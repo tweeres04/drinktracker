@@ -57,6 +57,16 @@ function useDrinks() {
 		});
 	}
 
+	function updateDrink(drink, { time, value }) {
+		const updatedDrink = drinkFactory({ time, value });
+		setDrinks((prevState) => {
+			const drinks = prevState.map((d) => (d === drink ? updatedDrink : d));
+			set('drinks', drinks);
+			return drinks;
+		});
+		return updatedDrink;
+	}
+
 	function clearDrinks() {
 		set('drinks', []);
 		setDrinks([]);
@@ -66,6 +76,7 @@ function useDrinks() {
 		drinks,
 		addDrink,
 		removeDrink,
+		updateDrink,
 		clearDrinks,
 	};
 }
@@ -279,7 +290,8 @@ function CurrentDrinksExplainer({ anchor, drinks }) {
 
 export default function Drinktracker() {
 	const [anchor, setAnchor] = useState(null);
-	const { drinks, addDrink, removeDrink, clearDrinks } = useDrinks();
+	const { drinks, addDrink, removeDrink, updateDrink, clearDrinks } =
+		useDrinks();
 	const { saveSession } = useSessions();
 
 	function newSession() {
@@ -336,6 +348,7 @@ export default function Drinktracker() {
 					<DrinksList
 						drinks={drinks}
 						removeDrink={removeDrink}
+						updateDrink={updateDrink}
 						currentDrinks={currentDrinksValue}
 					/>
 					{drinks && drinks.length > 0 && (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import _orderBy from 'lodash/fp/orderBy';
 import _round from 'lodash/round';
 import dateFormat from 'date-fns/format';
@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { Section } from '../App';
+import EditDrinkModal from './EditDrinkModal';
 
 function Statistic({ label, value, className, size = 1 }) {
 	const valueClasses = classnames(`is-size-${size}`, className);
@@ -23,7 +24,13 @@ function Statistic({ label, value, className, size = 1 }) {
 	);
 }
 
-export default function DrinksList({ drinks, removeDrink, currentDrinks }) {
+export default function DrinksList({
+	drinks,
+	removeDrink,
+	updateDrink,
+	currentDrinks,
+}) {
+	const [editingDrink, setEditingDrink] = useState(null);
 	drinks = _orderBy('time')('desc')(drinks);
 	const drinkListItems = drinks.map((drink, i) => {
 		const { value } = drink;
@@ -32,8 +39,11 @@ export default function DrinksList({ drinks, removeDrink, currentDrinks }) {
 		return (
 			<Section key={i}>
 				<li style={{ display: 'flex', alignItems: 'center' }}>
-					<div style={{ flex: 1, textAlign: 'left' }}>
-						<label className="label is-marginless">
+					<div
+						style={{ flex: 1, textAlign: 'left', cursor: 'pointer' }}
+						onClick={() => setEditingDrink(drink)}
+					>
+						<label className="label is-marginless" style={{ cursor: 'pointer' }}>
 							{value} drink{value == 1 ? '' : 's'} at
 						</label>
 						<div className="is-size-3">{time}</div>
@@ -100,6 +110,13 @@ export default function DrinksList({ drinks, removeDrink, currentDrinks }) {
 				/>
 			</div>
 			<ul>{drinkListItems}</ul>
+			{editingDrink && (
+				<EditDrinkModal
+					drink={editingDrink}
+					onSave={updateDrink}
+					onClose={() => setEditingDrink(null)}
+				/>
+			)}
 		</div>
 	);
 }
