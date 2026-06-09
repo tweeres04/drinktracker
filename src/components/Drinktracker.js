@@ -228,17 +228,22 @@ function CurrentDrinksExplainer({ anchor, drinks }) {
 		if (isNewUser && drinks?.length === 1) {
 			setShow(true);
 			anchor.scrollIntoView({ block: 'center' });
+			track('onboarding_explainer_started', { step_count: 3 });
+			track('onboarding_explainer_step_viewed', { step_index: 1 });
 		}
 	}, [anchor, drinks, isNewUser]);
 
 	function stepForward() {
 		if (step === 1) {
 			setStep(2);
+			track('onboarding_explainer_step_viewed', { step_index: 2 });
 		} else if (step === 2) {
 			setStep(3);
+			track('onboarding_explainer_step_viewed', { step_index: 3 });
 		} else if (step === 3) {
 			setShow(false);
 			setIsNewUser(false);
+			track('onboarding_explainer_completed', { step_count: 3 });
 		} else {
 			throw new Error(
 				"CurrentDrinksExplainer - Tried to step forward to a step that doesn't exist"
