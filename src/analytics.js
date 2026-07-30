@@ -7,6 +7,8 @@ export function initAnalytics() {
 		mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN, {
 			track_pageview: 'url-with-path',
 			record_sessions_percent: 100,
+			record_mask_all_inputs: false,
+			record_mask_all_text: false,
 		});
 	}
 }
