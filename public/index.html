@@ -9,6 +9,23 @@
 		<!-- Noindex on purpose: drinktracker.app is the page meant to rank. This app
 		drew 0 search clicks in 3 months and only competed with it. -->
 		<meta name="robots" content="noindex">
+
+		<!-- Share previews. Different audience from <title> above: someone being sent
+		this link for the first time, so these carry the pitch rather than being
+		scannable in a tab strip. share.png is a local copy of the marketing site's
+		image on purpose; that site's copy is served from a content-hashed URL that
+		changes every rebuild. Dimensions below must match public/share.png. -->
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://app.drinktracker.app/">
+		<meta property="og:title" content="Drinktracker: see your sobriety level in real time">
+		<meta property="og:description" content="Log each drink and see where you're at, not just a count. Free, no app install.">
+		<meta property="og:image" content="https://app.drinktracker.app/share.png">
+		<meta property="og:image:width" content="1200">
+		<meta property="og:image:height" content="630">
+		<meta property="og:image:alt" content="Drinktracker: 1.18 drinks still in you, sober by 10:17 PM, and a chart of the night.">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:creator" content="@tweeres">
+
 		<link rel="canonical" href="https://app.drinktracker.app/" />
 		<!--
 			manifest.json provides metadata used when your web app is added to the
