@@ -69,12 +69,7 @@ export default function Nav({ menu, toggleMenu, colourClass }) {
 					<a href={process.env.REACT_APP_FEEDBACK_FORM} className="navbar-item">
 						Submit Feedback
 					</a>
-					<a
-						className="navbar-item"
-						href={shareUrl}
-						role="button"
-						onClick={shareApp}
-					>
+					<a className="navbar-item" href={shareUrl} onClick={shareApp}>
 						{copied ? 'Link copied' : 'Share Drinktracker'}
 					</a>
 				</div>
